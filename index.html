@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>내 운동 기록</title>
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="운동 기록">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+:root{--bg:#f3f4f6;--card:#fff;--tx:#111827;--mu:#6b7280;--ln:#e5e7eb;--soft:#f3f4f6;--c:#2563eb;--ok:#059669;--up:#dc2626;--down:#2563eb;--amber:#d97706}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1014;--card:#1a1d23;--tx:#f3f4f6;--mu:#9ca3af;--ln:#2a2e36;--soft:#23272f}}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:var(--bg);color:var(--tx);line-height:1.5;-webkit-text-size-adjust:100%;padding-bottom:calc(96px + env(safe-area-inset-bottom));-webkit-tap-highlight-color:transparent}
+button,input,textarea{font:inherit;color:inherit}
+button{touch-action:manipulation;cursor:pointer}
+header{background:var(--c);color:#fff;padding:calc(14px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) 0 calc(16px + env(safe-area-inset-left));transition:background .2s}
+header .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+header h1{margin:0;font-size:20px;white-space:nowrap}
+header .tr{display:flex;align-items:center;gap:2px;min-width:0}
+#status{border:0;background:transparent;color:#fff;font-size:12px;opacity:.92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:8px 6px;min-width:0}
+#gear{border:0;background:transparent;font-size:20px;line-height:1;padding:6px;border-radius:10px;flex:none}
+#gear.on{background:rgba(255,255,255,.22)}
+nav{display:flex;margin-top:8px}
+nav button{flex:1;border:0;background:transparent;color:rgba(255,255,255,.75);padding:10px 0 12px;font-weight:600;border-bottom:3px solid transparent}
+nav button.on{color:#fff;border-color:#fff}
+main{max-width:640px;margin:0 auto;padding:12px calc(12px + env(safe-area-inset-right)) 12px calc(12px + env(safe-area-inset-left))}
+.card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.pick{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.seg{display:flex;background:var(--soft);border-radius:12px;padding:3px;max-width:100%;overflow-x:auto}
+.seg button{border:0;background:transparent;padding:8px 18px;border-radius:9px;font-weight:700;color:var(--mu);white-space:nowrap}
+.seg button.on{background:var(--card);color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.seg.mini button{padding:6px 12px;font-size:13px}
+input[type=date]{border:1px solid var(--ln);background:var(--soft);border-radius:10px;padding:8px 10px;min-height:42px}
+.week{font-size:13.5px;font-weight:600;margin-top:10px}
+.bwrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+.bwrow label{font-size:13px;color:var(--mu)}
+.bwrow input{width:78px;height:38px;text-align:center;border:1px solid var(--ln);background:var(--soft);border-radius:10px;font-size:16px;font-weight:700}
+.bwrow .unit{color:var(--mu);font-size:13px}
+.bwrow .seg{margin-left:auto}
+.hint{font-size:13px;color:var(--mu);margin-top:8px}
+.hint.warn{color:var(--up)}
+details summary{cursor:pointer;font-weight:600;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"▾";float:right;color:var(--mu)}
+details[open] summary::after{content:"▴"}
+details ul{margin:8px 0 0;padding-left:20px;font-size:14px}
+.stepper{display:flex;align-items:center;gap:8px;padding:8px}
+.stepper>button{flex:none;width:44px;height:44px;border:1px solid var(--ln);background:var(--soft);border-radius:12px;font-size:16px;font-weight:700}
+.stepper>button:disabled{opacity:.35}
+.stepper .mid{flex:1;min-width:0;text-align:center}
+#stname{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dots{display:flex;justify-content:center;gap:4px;margin-top:4px}
+#dots button{width:22px;height:22px;border:0;background:transparent;padding:0;display:grid;place-items:center}
+#dots i{display:block;width:10px;height:10px;border-radius:50%;background:var(--ln)}
+#dots .done i{background:var(--ok)}
+#dots .cur i{box-shadow:0 0 0 3px var(--c)}
+#exlist.focus .ex{display:none}
+#exlist.focus .ex.cur{display:block}
+.ex .hd{display:flex;gap:10px;align-items:center}
+.ex .hd>div{min-width:0}
+.num{flex:none;width:32px;height:32px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-weight:700}
+.ex h2{margin:0;font-size:18px}
+.sub{font-size:12.5px;color:var(--mu)}
+.ex.done .num{background:var(--ok)}
+.ex.done .num::after{content:"✓"}
+.ex.done .num span{display:none}
+.swapbtn{margin-left:auto;flex:none;border:1px solid var(--ln);background:var(--soft);border-radius:10px;padding:7px 10px;font-size:12.5px;color:var(--mu);white-space:nowrap}
+.swap{background:var(--soft);border-radius:10px;padding:10px;margin-top:10px;font-size:13px}
+.swap .chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.swap .chips button{border:1px solid var(--ln);background:var(--card);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600}
+.swap .row{display:flex;gap:6px}
+.swap .row input{flex:1;min-width:0;height:40px;border:1px solid var(--ln);background:var(--card);border-radius:10px;padding:0 10px;font-size:16px}
+.swap .row button{flex:none;border:0;background:var(--c);color:#fff;border-radius:10px;padding:0 14px;font-weight:700}
+.swap .altback{background:transparent!important;border:1px solid var(--ln)!important}
+.swap .w{color:var(--up);margin-top:6px}
+.mnote{display:block;width:100%;text-align:left;border:1px dashed var(--ln);background:transparent;border-radius:10px;padding:8px 10px;margin-top:10px;font-size:13px;color:var(--mu)}
+.mnote.has{border-style:solid;background:var(--soft);color:var(--tx);font-weight:600}
+.mnin{display:block;width:100%;height:40px;border:1px solid var(--c);background:var(--card);border-radius:10px;padding:0 10px;margin-top:10px;font-size:16px}
+.last{display:flex;justify-content:space-between;gap:6px 8px;align-items:center;flex-wrap:wrap;background:var(--soft);border-radius:10px;padding:8px 10px;margin:10px 0;font-size:13px}
+.badge{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px}
+.b-up{background:#fee2e2;color:#b91c1c}.b-down{background:#dbeafe;color:#1d4ed8}.b-keep{background:#e5e7eb;color:#374151}.b-new{background:#fef3c7;color:#92400e}
+@media (prefers-color-scheme:dark){.b-keep{background:#374151;color:#e5e7eb}}
+.wrow{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.wrow label{font-size:13px;color:var(--mu);width:36px}
+.step{border:1px solid var(--ln);background:var(--soft);border-radius:10px;width:42px;height:42px;font-size:20px;font-weight:700;flex:none}
+.wrow input{width:90px;height:42px;text-align:center;border:1px solid var(--ln);background:var(--card);border-radius:10px;font-size:18px;font-weight:700}
+.wrow .unit{color:var(--mu);font-size:13px}
+.sets{display:grid;gap:8px}
+.set{display:flex;align-items:center;gap:5px}
+.set .sl{width:36px;flex:none;font-size:13px;color:var(--mu)}
+.set input{width:52px;min-width:0;height:42px;text-align:center;border:1px solid var(--ln);background:var(--card);border-radius:10px;font-size:17px;font-weight:700;padding:0 2px}
+.set input.sw{width:60px;font-size:15px;font-weight:600;color:var(--mu)}
+.set input.sw.ov{border-color:var(--amber);color:var(--tx)}
+.set .u{font-size:12px;color:var(--mu);flex:none}
+.set .go{margin-left:auto;flex:none;border:0;background:var(--c);color:#fff;border-radius:10px;height:42px;padding:0 11px;font-weight:700;white-space:nowrap}
+.set.filled input[data-k=rep]{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--card))}
+.set.filled .go{background:var(--soft);color:var(--mu)}
+.feel{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:13px;color:var(--mu)}
+.feel button{border:1px solid var(--ln);background:var(--soft);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;color:var(--mu)}
+.feel button.on{background:var(--c);border-color:var(--c);color:#fff}
+.tips{margin-top:10px;border-top:1px dashed var(--ln);padding-top:8px}
+.tips ul{list-style:none;padding:0;margin:8px 0 0}
+.tips li{display:flex;gap:8px;padding:6px 0;font-size:14px}
+.tips li b{flex:none;font-size:11.5px;padding:1px 8px;border-radius:999px;height:fit-content;margin-top:2px;background:var(--soft)}
+.tips .tip b{background:#fef3c7;color:#92400e}.tips .warn b{background:#fee2e2;color:#991b1b}.tips .set_ b{background:#e0e7ff;color:#3730a3}
+textarea{width:100%;min-height:70px;border:1px solid var(--ln);background:var(--soft);border-radius:10px;padding:10px;resize:vertical}
+.hist .it{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--ln);cursor:pointer}
+.hist .it:last-child{border:0}
+.rb{flex:none;min-width:34px;height:34px;padding:0 6px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:800}
+.hist .meta{flex:1;min-width:0}
+.hist .meta b{display:block}
+.del{border:1px solid var(--ln);background:transparent;border-radius:8px;padding:6px 10px;font-size:12px;color:var(--mu);white-space:nowrap}
+.del.arm{background:var(--up);color:#fff;border-color:var(--up)}
+.empty{color:var(--mu);text-align:center;padding:24px 8px}
+.prog h3{margin:0 0 4px;font-size:16px}
+.prog h3 small{font-weight:500;color:var(--mu);font-size:12px}
+.prow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--ln)}
+.prow:last-child{border:0}
+.prow .pn{flex:1;min-width:0}
+.prow .pn b{display:block;font-size:14.5px}
+.prow .pn span{font-size:12px;color:var(--mu)}
+.prow svg{flex:none}
+.prow .pw{width:64px;text-align:right;font-weight:800}
+.bodyc .big{display:flex;align-items:center;gap:12px;margin-top:6px}
+.bodyc .big b{font-size:26px;font-weight:800}
+.bodyc .big svg{margin-left:auto}
+#timer{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);display:none;align-items:center;gap:12px;background:#111827;color:#fff;border-radius:999px;padding:10px 12px 10px 18px;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:9;white-space:nowrap}
+#timer.show{display:flex}
+#timer b{font-size:22px;font-variant-numeric:tabular-nums;min-width:56px}
+#timer button{border:0;border-radius:999px;padding:8px 12px;font-weight:700;background:#374151;color:#fff}
+#timer.end{background:var(--ok);animation:pulse .5s ease-in-out 6 alternate}
+#timer.end button{background:rgba(0,0,0,.25)}
+@keyframes pulse{from{transform:translateX(-50%) scale(1)}to{transform:translateX(-50%) scale(1.12)}}
+@media (prefers-reduced-motion:reduce){#timer.end{animation:none}}
+.hide{display:none!important}
+.note{font-size:12.5px;color:var(--mu);text-align:center;margin:4px 0 16px}
+.form h3{margin:0 0 4px;font-size:16px}
+.form label{display:block;font-size:13px;color:var(--mu);margin-top:12px}
+.form input{display:block;width:100%;margin-top:4px;height:44px;border:1px solid var(--ln);background:var(--soft);border-radius:10px;padding:0 12px;font-size:16px;color:var(--tx)}
+.btns{display:flex;gap:8px;margin-top:14px}
+.btn{flex:1;border:0;background:var(--c);color:#fff;border-radius:12px;height:46px;font-weight:700}
+.btn.ghost{background:var(--soft);color:var(--tx);border:1px solid var(--ln)}
+.btn:disabled{opacity:.6}
+.msg{font-size:13.5px;margin-top:10px;min-height:20px}
+.msg.good{color:var(--ok)}.msg.bad{color:var(--up)}
+ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
+</style>
+</head>
+<body>
+<header id="hdr">
+  <div class="top">
+    <h1>💪 내 운동 기록</h1>
+    <div class="tr"><button id="status" type="button">불러오는 중…</button><button id="gear" type="button" aria-label="설정">⚙️</button></div>
+  </div>
+  <nav><button data-tab="today" class="on">오늘 운동</button><button data-tab="hist">기록</button><button data-tab="prog">성장</button></nav>
+</header>
+<main>
+  <section id="v-today">
+    <div class="card">
+      <div class="pick">
+        <div class="seg" id="seg"></div>
+        <input type="date" id="date">
+      </div>
+      <div class="week" id="week"></div>
+      <div class="bwrow">
+        <label for="bw">체중</label><input id="bw" type="number" inputmode="decimal" step="0.1" min="0" placeholder="kg"><span class="unit">kg</span>
+        <div class="seg mini" id="viewseg"><button type="button" data-v="focus">한 종목씩</button><button type="button" data-v="list">전체</button></div>
+      </div>
+      <div class="hint" id="hint"></div>
+      <div class="hint warn hide" id="rwarn"></div>
+    </div>
+    <div class="card"><details id="warm"><summary>🔥 워밍업 (8분)</summary><ul></ul></details></div>
+    <div class="card stepper hide" id="stepper">
+      <button type="button" id="prev" aria-label="이전 운동">◀</button>
+      <div class="mid"><div id="stname"></div><div id="dots"></div></div>
+      <button type="button" id="next" aria-label="다음 운동">▶</button>
+    </div>
+    <div id="exlist"></div>
+    <div class="card"><details id="cool"><summary>🧘 마무리 스트레칭 (5분)</summary><ul></ul></details></div>
+    <div class="card"><b style="font-size:14px">메모</b><textarea id="memo" placeholder="컨디션, 통증 등 그날의 메모"></textarea></div>
+    <p class="note">입력하면 자동으로 저장돼요. 규칙: 모든 세트 목표 달성 → 다음번 증량 (힘들었으면 한 번 더) / 첫 세트가 목표보다 2회 넘게 모자라면 → 감량</p>
+  </section>
+  <section id="v-hist" class="hide"><div class="card hist" id="histlist"></div></section>
+  <section id="v-prog" class="hide"><div id="proglist"></div></section>
+  <section id="v-set" class="hide">
+    <div class="card" id="welcome">
+      <b>처음 한 번만 연결하면 돼요</b>
+      <ol class="steps">
+        <li>설명서(README)대로 구글 시트와 Apps Script를 준비합니다.</li>
+        <li>거기서 받은 <b>웹 앱 URL</b>과 <b>토큰</b>을 아래에 붙여넣습니다.</li>
+        <li>"연결 테스트"가 성공하면 "저장"을 누릅니다.</li>
+      </ol>
+      <div class="hint">연결 전에 입력한 기록은 이 휴대폰에 보관했다가, 연결되면 시트로 보냅니다.</div>
+    </div>
+    <div class="card form">
+      <h3>구글 시트 연결</h3>
+      <label>Apps Script 웹 앱 URL
+        <input id="cfg-url" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="https://script.google.com/macros/s/…/exec">
+      </label>
+      <label>토큰
+        <input id="cfg-token" type="text" autocapitalize="off" autocorrect="off" spellcheck="false" autocomplete="off" placeholder="setup 실행 로그에 나온 TOKEN 값">
+      </label>
+      <div class="btns"><button id="cfg-test" class="btn ghost" type="button">연결 테스트</button><button id="cfg-save" class="btn" type="button">저장</button></div>
+      <div id="cfg-msg" class="msg"></div>
+    </div>
+    <div class="card form">
+      <h3>동기화</h3>
+      <div class="hint" id="sync-info"></div>
+      <ul class="steps hide" id="warn-list"></ul>
+      <div class="btns"><button id="sync-now" class="btn ghost" type="button">지금 동기화</button></div>
+      <div class="hint">루틴, 주간 목표는 구글 시트의 routines · exercises · config 탭에서 고칩니다. 고친 뒤 "지금 동기화"를 누르세요.</div>
+    </div>
+    <p class="note" id="ver"></p>
+  </section>
+</main>
+<div id="timer"><span>휴식</span><b id="tleft">0:00</b><button id="tplus" type="button">+30초</button><button id="tstop" type="button">끝</button></div>
+<script>
+"use strict";
+var VERSION = "1.1.0";
+var LS = {cfg:"gym.cfg", sessions:"gym.sessions", queue:"gym.queue", routines:"gym.routines", notes:"gym.notes", body:"gym.body", config:"gym.config", view:"gym.view"};
+var LAB = {"세팅":"set_", "꿀팁":"tip", "주의":"warn"};
+var FEEL = {easy:"쉬움", ok:"적당", hard:"힘듦"};
+
+var R = {}, ORDER = [], ACTIVE = [], rSig = "";   // 루틴 데이터 (시트의 routines/exercises 탭, 없으면 routines.json)
+var sessions = {};                        // id -> {date,routine,ex,memo,updatedAt}
+var notes = {}, body = {};                // 운동별 머신 세팅 메모, 날짜별 체중
+var conf = {weeklyGoal:3, programStart:"", changeWeek:5};
+var warns = [];                           // 시트의 루틴 표에서 발견된 문제
+var cur = null;                           // 지금 편집 중인 세션
+var dirty = false, saveTimer = null, bwTimer = null, bwPending = null;
+var cfg = null;                           // {url, token}
+var queue = {}, seq = 0;                  // 전송 대기열: key -> {op, n, ...}
+var busy = false, inflight = 0, wantRefresh = false, wantInit = false, initTried = false, listed = false;
+var net = "ok";                           // ok | offline | server | auth
+var retryTimer = null, lastRefresh = 0;
+var booted = false, bootTimer = null, auto = true, dayOpened = "";
+var lastExHtml = null;
+var view = "focus", idx = 0, swapOpen = -1;
+
+var $ = function(s){return document.querySelector(s)};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function today(){var d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)}
+function fmtW(w){return (w===""||w==null)?"-":(Number(w)===0?"기구만":(+w)+"kg")}
+function num(v){var n=parseFloat(v);return isNaN(n)?null:n}
+function has(v){return v!==""&&v!=null}
+function clone(o){return JSON.parse(JSON.stringify(o))}
+function color(r){return (R[r]&&R[r].color)||"#6b7280"}
+function lsGet(k,def){try{var v=localStorage.getItem(k);return v==null?def:JSON.parse(v)}catch(e){return def}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function saveCache(){lsSet(LS.sessions,sessions)}
+function saveQueue(){lsSet(LS.queue,queue)}
+function pending(){return Object.keys(queue).length}
+function isDate(s){return /^\d{4}-\d{2}-\d{2}$/.test(String(s||""))}
+
+/* ---------- 상태 표시 ---------- */
+function updStatus(){
+  var t,work=dirty||bwPending||pending();
+  if(!cfg)t="⚙️ 연결 설정 필요";
+  else if(net==="auth")t="⚠️ 토큰 확인 필요";
+  else if(net==="offline")t=work?"⚠️ 오프라인, 나중에 전송":"⚠️ 오프라인";
+  else if(net==="server")t="⚠️ 서버 오류, 다시 시도 예정";
+  else if(work)t="저장 중…";
+  else if(busy)t=listed?"동기화 중…":"불러오는 중…";
+  else t="저장됨 ✓";
+  $("#status").textContent=t;
+  var n=pending();
+  $("#sync-info").textContent=!cfg?"아직 연결되지 않았어요.":(n?("시트로 보내지 못한 기록 "+n+"건이 이 휴대폰에 대기 중이에요."):"모든 기록이 시트에 저장돼 있어요.");
+  var wl=$("#warn-list");wl.classList.toggle("hide",!warns.length);
+  wl.innerHTML=warns.map(function(w){return "<li>⚠️ "+esc(w)+"</li>"}).join("");
+  var rw=$("#rwarn");rw.classList.toggle("hide",!warns.length);
+  rw.textContent=warns.length?"⚠️ 시트의 루틴 표에 고칠 곳이 "+warns.length+"군데 있어요 (⚙️ 설정에서 확인)":"";
+}
+
+/* ---------- 서버 통신 (Apps Script) ---------- */
+function api(body_,opt){
+  var c=(opt&&opt.cfg)||cfg;
+  if(!c)return Promise.reject(new Error("nocfg"));
+  body_.token=c.token;
+  var ctl=window.AbortController?new AbortController():null;
+  var to=setTimeout(function(){if(ctl)ctl.abort()},25000);
+  var init={method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body_),redirect:"follow"};
+  if(ctl)init.signal=ctl.signal;
+  if(opt&&opt.keepalive)init.keepalive=true;
+  return fetch(c.url,init).then(function(r){
+    if(!r.ok)throw new Error("http "+r.status);
+    return r.json();
+  }).then(function(j){
+    clearTimeout(to);
+    if(!j||!j.ok){var e=new Error((j&&j.error)||"error");e.server=true;throw e}
+    return j;
+  },function(e){clearTimeout(to);throw e});
+}
+function classify(err){
+  if(err&&err.server)return err.message==="unauthorized"?"auth":"server";
+  return "offline";
+}
+function bodyFor(key,job){
+  if(job.op==="delete")return {action:"delete",id:key};
+  if(job.op==="note")return {action:"note",exId:job.exId,name:job.name,text:job.text};
+  if(job.op==="body")return {action:"body",date:job.date,kg:job.kg};
+  var names={},RT=R[job.d.routine];
+  if(RT)RT.ex.forEach(function(x){names[x.id]=x.name});
+  Object.keys(job.d.ex||{}).forEach(function(k){var e=job.d.ex[k];if(e&&e.name)names[k]=e.name});
+  return {action:"save",session:{id:key,date:job.d.date,routine:job.d.routine,ex:job.d.ex,memo:job.d.memo||""},names:names};
+}
+// 한 번에 요청 하나만. 대기열 → (처음 한 번) 루틴 표 채우기 → 목록 새로 받기 순서.
+function pump(){
+  if(busy||!cfg)return;
+  clearTimeout(retryTimer);
+  var keys=Object.keys(queue).sort(function(a,b){return queue[a].n-queue[b].n});
+  if(keys.length){
+    var key=keys[0],job=queue[key];
+    busy=true;inflight=job.n;updStatus();
+    api(bodyFor(key,job),{keepalive:true}).then(function(res){
+      busy=false;inflight=0;net="ok";
+      if(queue[key]&&queue[key].n===job.n){
+        delete queue[key];saveQueue();
+        if(job.op==="save"&&res.updatedAt&&sessions[key]){
+          sessions[key].updatedAt=res.updatedAt;
+          if(cur&&cur.id===key)cur.updatedAt=res.updatedAt;
+          saveCache();
+        }
+      }
+      updStatus();renderHist();pump();
+    },netFail);
+    return;
+  }
+  if(wantInit){
+    wantInit=false;initTried=true;busy=true;
+    var done=function(){busy=false;updStatus();pump()};
+    api({action:"initRoutines",routines:R}).then(done,done);
+    return;
+  }
+  if(wantRefresh){
+    wantRefresh=false;busy=true;updStatus();
+    api({action:"list"}).then(function(res){
+      busy=false;net="ok";lastRefresh=Date.now();
+      applyList(res);
+      updStatus();pump();
+    },function(err){wantRefresh=true;netFail(err)});
+  }
+}
+function netFail(err){
+  busy=false;inflight=0;net=classify(err);updStatus();
+  if(!booted)start();
+  if(net!=="auth")retryTimer=setTimeout(pump,30000);
+}
+function applyList(res){
+  var m={},n=res.notes&&typeof res.notes==="object"?res.notes:{},b=res.body&&typeof res.body==="object"?res.body:{};
+  (res.sessions||[]).forEach(function(s){
+    if(!s||!s.id||!s.date||!s.routine)return;
+    m[s.id]={date:String(s.date),routine:String(s.routine),ex:(s.ex&&typeof s.ex==="object")?s.ex:{},memo:s.memo||"",updatedAt:s.updatedAt||""};
+  });
+  // 아직 보내지 못한 내 변경이 서버 값보다 우선
+  Object.keys(queue).forEach(function(k){
+    var j=queue[k];
+    if(j.op==="delete")delete m[k];
+    else if(j.op==="save")m[k]=j.d;
+    else if(j.op==="note"){if(j.text)n[j.exId]=j.text;else delete n[j.exId]}
+    else if(j.op==="body"){if(j.kg)b[j.date]=j.kg;else delete b[j.date]}
+  });
+  sessions=m;saveCache();
+  notes=n;lsSet(LS.notes,notes);
+  body=b;lsSet(LS.body,body);
+  if(res.config){lsSet(LS.config,res.config);setConf(res.config)}
+  warns=Array.isArray(res.warnings)?res.warnings:[];
+  listed=true;
+  if(res.routines){
+    try{if(setRoutines(res.routines))lsSet(LS.routines,res.routines)}catch(e){}
+  }else if(!initTried&&"routines" in res)wantInit=true;   // 시트의 루틴 표가 비어 있으면 기본 루틴으로 채움
+  lastExHtml=null;
+  onData();
+}
+function setConf(c){
+  var g=parseInt(c.weeklyGoal,10),w=parseInt(c.changeWeek,10);
+  conf={weeklyGoal:(g>=1&&g<=7)?g:3,programStart:isDate(c.programStart)?c.programStart:"",changeWeek:isNaN(w)?5:w};
+}
+// 화면을 떠날 때: 아직 전송을 시작하지 못한 건은 beacon으로 한 번 더 보냄 (대기열에는 남겨 두고 다음에 확인)
+function beaconQueue(){
+  if(!cfg||!navigator.sendBeacon)return;
+  Object.keys(queue).forEach(function(k){
+    var j=queue[k];if(j.n===inflight)return;
+    var b=bodyFor(k,j);b.token=cfg.token;
+    try{navigator.sendBeacon(cfg.url,JSON.stringify(b))}catch(e){}
+  });
+}
+
+/* ---------- 루틴 데이터 ---------- */
+function setRoutines(j){
+  if(!j||typeof j!=="object")throw new Error("routines");
+  var keys=Object.keys(j).filter(function(k){return j[k]&&Array.isArray(j[k].ex)&&j[k].ex.length});
+  if(!keys.length)throw new Error("routines");
+  var sig=JSON.stringify(j);
+  if(sig===rSig)return false;
+  var out={};
+  keys.forEach(function(k){
+    var r=clone(j[k]);
+    r.ex.forEach(function(x){
+      x.sets=x.sets||3;x.hi=x.hi||10;x.lo=x.lo||x.hi;x.step=x.step||2.5;x.rest=x.rest||90;
+      if(!has(x.reps))x.reps=String(x.hi);
+      if(!x.restLabel)x.restLabel=x.rest%60===0?(x.rest/60)+"분":x.rest+"초";
+      if(!Array.isArray(x.items))x.items=[];
+      if(!Array.isArray(x.alt))x.alt=[];
+    });
+    out[k]=r;
+  });
+  R=out;rSig=sig;
+  ACTIVE=keys.filter(function(k){return !out[k].archived});
+  if(!ACTIVE.length)ACTIVE=keys.slice();
+  ORDER=ACTIVE.concat(keys.filter(function(k){return ACTIVE.indexOf(k)<0}));
+  if(booted&&cur&&!R[cur.routine]){dirty=false;cur=null;openSession(today(),pickRoutine(today()))}
+  return true;
+}
+
+/* ---------- 세션 로직 ---------- */
+function sid(date,r){return date+"_"+r}
+function setW(e,i){var v=e.ws&&e.ws[i];return has(v)?v:e.w}
+// 그 세션에서 운동 x 자리에 실제로 기록된 것 (대체 운동이면 그쪽)
+function slotOf(s,x){
+  var ex=(s&&s.ex)||{},k;
+  for(k in ex){if(ex[k]&&ex[k].sub===x.id)return {id:k,e:ex[k],alt:true,name:ex[k].name||k.replace(/^alt:/,"")}}
+  return {id:x.id,e:ex[x.id]||null,alt:false,name:x.name};
+}
+function curSlot(x){
+  var sl=slotOf(cur,x);
+  if(!sl.e)sl.e=cur.ex[x.id]={w:"",reps:[]};
+  if(!sl.e.reps)sl.e.reps=[];
+  return sl;
+}
+function lastFor(exId,beforeDate,excludeId){
+  var best=null;
+  Object.keys(sessions).forEach(function(k){
+    if(k===excludeId)return;var s=sessions[k];
+    if(!s||!s.ex||!s.ex[exId]||s.date>beforeDate)return;
+    var e=s.ex[exId];if(num(e.w)==null&&!(e.reps||[]).some(function(x){return num(x)!=null}))return;
+    if(!best||s.date>best.date)best={date:s.date,w:e.w,reps:e.reps||[],ws:e.ws||[],f:e.f||""};
+  });
+  return best;
+}
+function suggest(x,last,alt){
+  if(!last||num(last.w)==null)return {kind:"new",w:"",text:alt?"첫 기록 · 가볍게 시작해 맞는 무게를 찾으세요":"첫 기록 · 시작 무게: "+(x.start||"가볍게")};
+  var w=num(last.w),done=[];
+  (last.reps||[]).forEach(function(r,i){var n=num(r);if(n==null)return;var sw=num(setW(last,i));done.push({r:n,w:sw==null?w:sw})});
+  var first=done.slice(0,x.sets),full=done.length>=x.sets;
+  var minW=first.length?Math.min.apply(0,first.map(function(d){return d.w})):w;
+  var atW=full&&minW>=w;                                     // 모든 세트를 기본 무게 이상으로 했는가
+  var hitHi=first.every(function(d){return d.r>=x.hi}),hitLo=first.every(function(d){return d.r>=x.lo});
+  if(atW&&(hitHi||(last.f==="easy"&&x.lo<x.hi&&hitLo))){
+    if(last.f==="hard")return {kind:"keep",w:w,text:"= 같은 무게로 (지난번 힘듦)"};
+    var nw=+(minW+x.step).toFixed(1);
+    return {kind:"up",w:nw,text:minW>w?"↑ 증량 → "+nw+"kg":"↑ 증량 +"+x.step+"kg"};
+  }
+  if(done.length&&done[0].r<x.lo-2)return {kind:"down",w:Math.max(0,+(w-x.step).toFixed(1)),text:"↓ 감량 -"+x.step+"kg"};
+  return {kind:"keep",w:w,text:"= 같은 무게로"};
+}
+function lastText(last){
+  if(!last)return "아직 기록 없음";
+  var rs=[],wsx=[],varied=false;
+  (last.reps||[]).forEach(function(r,i){
+    if(!has(r))return;rs.push(r);
+    var w=setW(last,i);wsx.push(has(w)?(+w):"-");
+    if(String(w)!==String(last.w))varied=true;
+  });
+  return "지난번 "+last.date.slice(5).replace("-","/")+" · "+(varied?wsx.join("/")+"kg":fmtW(last.w))+" · "+(rs.join("/")||"-")+"회"+(FEEL[last.f]&&last.f!=="ok"?" · "+FEEL[last.f]:"");
+}
+function freshEntry(x,id,alt){
+  var sg=suggest(x,lastFor(id,cur?cur.date:today(),cur?cur.id:""),alt);
+  return {w:sg.w===""?"":String(sg.w),reps:[]};
+}
+function blank(date,r){
+  var s={date:date,routine:r,ex:{},memo:""};
+  R[r].ex.forEach(function(x){var sg=suggest(x,lastFor(x.id,date,sid(date,r)),false);s.ex[x.id]={w:sg.w===""?"":String(sg.w),reps:[]}});
+  return s;
+}
+// 기본 루틴: 그날 기록이 있으면 그 루틴, 없으면 가장 최근 기록의 다음 루틴, 기록이 없으면 첫 루틴
+function pickRoutine(date){
+  var hit=ORDER.filter(function(r){return sessions[sid(date,r)]})[0];
+  if(hit)return hit;
+  var ids=Object.keys(sessions).filter(function(k){return sessions[k]&&sessions[k].date}).sort(function(a,b){
+    return sessions[b].date.localeCompare(sessions[a].date)||String(sessions[b].updatedAt||"").localeCompare(String(sessions[a].updatedAt||""));
+  });
+  if(ids.length){var i=ACTIVE.indexOf(sessions[ids[0]].routine);return ACTIVE[(i+1)%ACTIVE.length]}
+  return ACTIVE[0];
+}
+function firstUndone(){
+  var ex=R[cur.routine].ex;
+  for(var i=0;i<ex.length;i++){var sl=slotOf(cur,ex[i]);if(!sl.e||!isDone(ex[i],sl.e))return i}
+  return 0;
+}
+function openSession(date,r){
+  flush();
+  if(!R[r])r=ACTIVE[0];
+  var id=sid(date,r),ex=sessions[id];
+  cur=ex?clone(ex):blank(date,r);
+  cur.id=id;dirty=false;lastExHtml=null;swapOpen=-1;
+  idx=firstUndone();
+  renderToday();updStatus();
+}
+function markDirty(){
+  dirty=true;auto=false;lastExHtml=null;updStatus();
+  clearTimeout(saveTimer);saveTimer=setTimeout(flush,900);
+}
+function flush(){
+  flushBody();
+  clearTimeout(saveTimer);
+  if(!dirty||!cur)return;
+  dirty=false;
+  var id=cur.id,d=clone(cur);delete d.id;d.updatedAt=new Date().toISOString();
+  Object.keys(d.ex).forEach(function(k){var e=d.ex[k];if(e&&e.ws&&!e.ws.some(has))delete e.ws});
+  sessions[id]=d;cur.updatedAt=d.updatedAt;saveCache();
+  queue[id]={op:"save",d:d,n:++seq};saveQueue();
+  setHint();renderWeek();renderHist();renderProg();updStatus();pump();
+}
+function flushBody(){
+  clearTimeout(bwTimer);
+  if(!bwPending)return;
+  var p=bwPending;bwPending=null;
+  var kg=num(p.kg),v=(kg==null||kg<=0)?"":String(kg);
+  if((body[p.date]||"")!==v){
+    if(v)body[p.date]=v;else delete body[p.date];
+    lsSet(LS.body,body);
+    queue["body:"+p.date]={op:"body",date:p.date,kg:v,n:++seq};saveQueue();
+    renderProg();pump();
+  }
+  updStatus();
+}
+function saveNote(id,name,text){
+  text=String(text||"").trim();
+  if((notes[id]||"")===text)return;
+  if(text)notes[id]=text;else delete notes[id];
+  lsSet(LS.notes,notes);
+  queue["note:"+id]={op:"note",exId:id,name:name,text:text,n:++seq};saveQueue();
+  updStatus();pump();
+}
+// 대체 운동 이름이 다른 루틴에 있는 운동이면 그 기록과 이어지도록 같은 id를 씀
+function altId(name,r){
+  var hit=null;
+  ORDER.forEach(function(k){R[k].ex.forEach(function(x){if(!hit&&x.name===name)hit=x.id})});
+  if(hit&&!R[r].ex.some(function(x){return x.id===hit}))return hit;
+  return "alt:"+name;
+}
+function doSwap(i,name){
+  var x=R[cur.routine].ex[i],sl=slotOf(cur,x);
+  name=String(name||"").trim();
+  if(sl.alt)delete cur.ex[sl.id];
+  delete cur.ex[x.id];
+  if(name&&name!==x.name){
+    var id=altId(name,cur.routine),e=freshEntry(x,id,true);
+    e.sub=x.id;e.name=name;cur.ex[id]=e;
+  }else cur.ex[x.id]=freshEntry(x,x.id,false);
+  swapOpen=-1;markDirty();renderToday();
+}
+
+/* ---------- 화면: 오늘 운동 ---------- */
+function setHint(){
+  if(!cur)return;
+  $("#hint").textContent=sessions[cur.id]?"저장된 기록을 불러왔어요. 고치면 자동 저장돼요.":"새 기록이에요. 무게는 지난 기록을 보고 추천값을 넣어 뒀어요.";
+}
+function buildSeg(){
+  var keys=ACTIVE.slice();
+  if(cur&&keys.indexOf(cur.routine)<0)keys.push(cur.routine);
+  $("#seg").innerHTML=keys.map(function(k){
+    return '<button type="button" data-r="'+esc(k)+'"'+(cur&&cur.routine===k?' class="on"':'')+'>'+esc(R[k].label||(k+" day"))+'</button>';
+  }).join("");
+}
+function ymd(d){return d.toISOString().slice(0,10)}
+function monday(s){var d=new Date(s+"T00:00:00Z");d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));return d}
+function didWork(s){return Object.keys(s.ex||{}).some(function(k){return ((s.ex[k]||{}).reps||[]).some(has)})}
+function renderWeek(){
+  var m0=monday(today()),a=ymd(m0),b=ymd(new Date(m0.getTime()+7*864e5)),days={},start=conf.programStart||"";
+  Object.keys(sessions).forEach(function(k){
+    var s=sessions[k];if(!s||!isDate(s.date)||!didWork(s))return;
+    if(s.date>=a&&s.date<b)days[s.date]=1;
+    if(!conf.programStart&&(!start||s.date<start))start=s.date;
+  });
+  var n=Object.keys(days).length,g=conf.weeklyGoal,dots="";
+  for(var i=0;i<Math.max(g,n);i++)dots+=i<n?"●":"○";
+  var t="이번 주 "+dots+" "+n+"/"+g+"회"+(n>=g?" 🎉":"");
+  if(start){
+    var w=Math.floor((m0-monday(start))/(7*864e5))+1;
+    if(w>=1){t+=" · "+w+"주차";if(conf.changeWeek>0&&w>=conf.changeWeek)t+=" · 루틴을 바꿀 때예요"}
+  }
+  $("#week").textContent=t;
+}
+function isDone(x,e){return (e.reps||[]).filter(has).length>=x.sets}
+function cardHtml(x,i){
+  var sl=curSlot(x),e=sl.e;
+  var last=lastFor(sl.id,cur.date,cur.id),sg=suggest(x,last,sl.alt);
+  var note=notes[sl.id]||"";
+  var sets="";
+  for(var s=0;s<x.sets;s++){
+    var v=e.reps[s],f=has(v),sw=setW(e,s),ov=has(e.ws&&e.ws[s])&&String(e.ws[s])!==String(e.w);
+    sets+='<div class="set'+(f?" filled":"")+'" data-s="'+s+'"><span class="sl">'+(s+1)+'세트</span>'+
+      '<input class="sw'+(ov?" ov":"")+'" inputmode="decimal" type="number" step="0.5" min="0" data-k="sw" value="'+esc(has(sw)?sw:"")+'" placeholder="kg" aria-label="'+(s+1)+'세트 무게"><span class="u">kg ×</span>'+
+      '<input inputmode="numeric" type="number" min="0" data-k="rep" value="'+(f?esc(v):"")+'" placeholder="'+x.hi+'" aria-label="'+(s+1)+'세트 횟수"><span class="u">회</span>'+
+      '<button type="button" class="go">'+(f?"완료":"✓ "+x.hi+"회")+'</button></div>';
+  }
+  var swap="";
+  if(swapOpen===i){
+    var chips=x.alt.filter(function(a){return a!==sl.name}).map(function(a){return '<button type="button" class="altchip" data-name="'+esc(a)+'">'+esc(a)+'</button>'}).join("");
+    swap='<div class="swap"><b>오늘만 다른 운동으로 바꾸기</b>'+
+      (chips?'<div class="chips">'+chips+'</div>':'<div style="height:8px"></div>')+
+      '<div class="row"><input type="text" data-k="altname" placeholder="운동 이름 직접 입력" autocomplete="off"><button type="button" class="altgo">바꾸기</button></div>'+
+      (sl.alt?'<div class="row" style="margin-top:6px"><button type="button" class="altchip altback" data-name="" style="flex:1;color:inherit;height:40px">↩ 원래 운동('+esc(x.name)+')으로</button></div>':'')+
+      (e.reps.some(has)?'<div class="w">바꾸면 이 운동에 입력한 횟수는 지워져요.</div>':'')+'</div>';
+  }
+  return '<div class="card ex'+(isDone(x,e)?" done":"")+'" data-i="'+i+'">'+
+    '<div class="hd"><span class="num"><span>'+(i+1)+'</span></span><div><h2>'+esc(sl.name)+'</h2><div class="sub">'+(sl.alt?esc(x.name)+' 대신 · ':(x.part?esc(x.part)+' · ':''))+x.sets+'×'+esc(x.reps)+' · 휴식 '+esc(x.restLabel)+'</div></div>'+
+      '<button type="button" class="swapbtn">'+(swapOpen===i?"닫기":"🔄 대체")+'</button></div>'+
+    swap+
+    '<button type="button" class="mnote'+(note?" has":"")+'">'+(note?"⚙️ "+esc(note):"⚙️ 머신 세팅 메모 (의자 높이, 핀 위치 등)")+'</button>'+
+    '<div class="last"><span>'+esc(lastText(last))+'</span><span class="badge b-'+sg.kind+'">'+esc(sg.text)+'</span></div>'+
+    '<div class="wrow"><label>무게</label><button type="button" class="step" data-d="-1">−</button><input inputmode="decimal" type="number" step="0.5" min="0" data-k="w" value="'+esc(e.w==null?"":e.w)+'" placeholder="kg" aria-label="기본 무게"><button type="button" class="step" data-d="1">+</button><span class="unit">kg <small>(0=기구만)</small></span></div>'+
+    '<div class="sets">'+sets+'</div>'+
+    '<div class="feel"><span>난이도</span>'+["easy","ok","hard"].map(function(k){return '<button type="button" data-f="'+k+'"'+(e.f===k?' class="on"':'')+'>'+FEEL[k]+'</button>'}).join("")+'</div>'+
+    (!sl.alt&&x.items.length?'<details class="tips"><summary>💡 세팅 · 꿀팁 · 주의</summary><ul>'+x.items.map(function(it){return'<li class="'+(LAB[it[0]]||"")+'"><b>'+esc(it[0])+'</b><span>'+esc(it[1])+'</span></li>'}).join("")+'</ul></details>':'')+
+  '</div>';
+}
+function renderToday(){
+  if(!cur||!R[cur.routine])return;
+  var RT=R[cur.routine],c=color(cur.routine);
+  document.documentElement.style.setProperty("--c",c);
+  var tm=document.querySelector('meta[name="theme-color"]');if(tm)tm.setAttribute("content",c);
+  buildSeg();
+  $("#date").value=cur.date;
+  setHint();renderWeek();
+  if(document.activeElement!==$("#bw")&&!bwPending)$("#bw").value=body[cur.date]||"";
+  document.querySelectorAll("#viewseg button").forEach(function(b){b.classList.toggle("on",b.dataset.v===view)});
+  $("#warm ul").innerHTML=(RT.warm||[]).map(function(w){return"<li>"+esc(w)+"</li>"}).join("");
+  $("#cool ul").innerHTML=(RT.cool||[]).map(function(w){return"<li>"+esc(w)+"</li>"}).join("");
+  if(document.activeElement!==$("#memo"))$("#memo").value=cur.memo||"";
+  var h=RT.ex.map(cardHtml).join("");
+  if(h!==lastExHtml){$("#exlist").innerHTML=h;lastExHtml=h}
+  applyFocus();
+}
+// "한 종목씩" 보기: 지금 차례인 카드 하나만 보여 주고 위쪽에 진행 표시
+function applyFocus(){
+  var cards=document.querySelectorAll("#exlist .ex"),n=cards.length,on=view==="focus"&&n>0;
+  $("#stepper").classList.toggle("hide",!on);
+  $("#exlist").classList.toggle("focus",on);
+  if(!on||!cur)return;
+  if(idx>=n)idx=n-1;if(idx<0)idx=0;
+  var ex=R[cur.routine].ex,dots="";
+  cards.forEach(function(c,i){
+    c.classList.toggle("cur",i===idx);
+    dots+='<button type="button" data-i="'+i+'" class="'+(c.classList.contains("done")?"done":"")+(i===idx?" cur":"")+'" aria-label="'+(i+1)+'번 운동"><i></i></button>';
+  });
+  $("#stname").textContent=(idx+1)+" / "+n+" · "+slotOf(cur,ex[idx]).name;
+  $("#dots").innerHTML=dots;
+  $("#prev").disabled=idx===0;$("#next").disabled=idx===n-1;
+}
+function goIdx(i){idx=i;swapOpen=-1;lastExHtml=null;renderToday()}
+$("#prev").addEventListener("click",function(){if(idx>0)goIdx(idx-1)});
+$("#next").addEventListener("click",function(){goIdx(idx+1)});
+$("#dots").addEventListener("click",function(ev){var b=ev.target.closest("button");if(b)goIdx(+b.dataset.i)});
+$("#viewseg").addEventListener("click",function(ev){
+  var b=ev.target.closest("button");if(!b||b.dataset.v===view)return;
+  view=b.dataset.v;lsSet(LS.view,view);
+  if(view==="focus"&&cur)idx=firstUndone();
+  renderToday();
+});
+function refreshCard(card){
+  var x=R[cur.routine].ex[+card.dataset.i],e=curSlot(x).e;
+  card.classList.toggle("done",isDone(x,e));
+  card.querySelectorAll(".set").forEach(function(row){var f=has(e.reps[+row.dataset.s]);row.classList.toggle("filled",f);row.querySelector(".go").textContent=f?"완료":"✓ "+x.hi+"회"});
+  applyFocus();
+}
+// 기본 무게가 바뀌면, 따로 고치지 않은 세트의 무게도 따라감
+function syncSetW(card,e){
+  card.querySelectorAll(".set").forEach(function(row){
+    var s=+row.dataset.s,inp=row.querySelector(".sw");
+    var ov=has(e.ws&&e.ws[s])&&String(e.ws[s])!==String(e.w);
+    if(!ov){if(e.ws&&e.ws[s]!=null)e.ws[s]="";if(document.activeElement!==inp)inp.value=e.w}
+    inp.classList.toggle("ov",ov);
+  });
+}
+$("#exlist").addEventListener("input",function(ev){
+  var t=ev.target,card=t.closest(".ex"),k=t.dataset.k;if(!card||!cur)return;
+  if(k!=="w"&&k!=="sw"&&k!=="rep")return;
+  var x=R[cur.routine].ex[+card.dataset.i],e=curSlot(x).e,s;
+  if(k==="w"){e.w=t.value;syncSetW(card,e)}
+  if(k==="sw"){
+    s=+t.closest(".set").dataset.s;
+    if(!has(e.w)&&t.value!==""){   // 기본 무게가 비어 있으면 첫 입력이 기본 무게가 됨
+      e.w=t.value;card.querySelector('input[data-k="w"]').value=e.w;
+    }else{
+      if(!e.ws)e.ws=[];while(e.ws.length<=s)e.ws.push("");
+      e.ws[s]=(t.value===""||t.value===String(e.w))?"":t.value;
+    }
+    syncSetW(card,e);
+  }
+  if(k==="rep"){s=+t.closest(".set").dataset.s;while(e.reps.length<=s)e.reps.push("");e.reps[s]=t.value}
+  refreshCard(card);markDirty();
+});
+$("#exlist").addEventListener("click",function(ev){
+  var t=ev.target,card=t.closest(".ex");if(!card||!cur)return;
+  var i=+card.dataset.i,x=R[cur.routine].ex[i],sl=curSlot(x),e=sl.e;
+  if(t.classList.contains("step")){
+    var w=num(e.w)||0;w=Math.max(0,+(w+(+t.dataset.d)*x.step).toFixed(1));e.w=String(w);
+    card.querySelector('input[data-k="w"]').value=e.w;syncSetW(card,e);markDirty();
+  }
+  else if(t.classList.contains("go")){
+    primeAudio();auto=false;
+    var row=t.closest(".set"),s=+row.dataset.s,inp=row.querySelector('input[data-k="rep"]');
+    if(inp.value===""){inp.value=x.hi;while(e.reps.length<=s)e.reps.push("");e.reps[s]=String(x.hi);markDirty()}
+    refreshCard(card);
+    var n=R[cur.routine].ex.length;
+    if(s<x.sets-1||i<n-1)startTimer(x.rest);
+    if(view==="focus"&&isDone(x,e)&&i===idx){        // 종목을 끝내면 잠시 뒤 다음 종목으로
+      var nx=-1;for(var j=1;j<n;j++){var y=R[cur.routine].ex[(i+j)%n],se=slotOf(cur,y).e;if(!se||!isDone(y,se)){nx=(i+j)%n;break}}
+      if(nx>=0)setTimeout(function(){if(idx===i&&view==="focus"&&document.activeElement.tagName!=="INPUT")goIdx(nx)},900);
+    }
+  }
+  else if(t.closest(".feel")&&t.dataset.f){
+    e.f=e.f===t.dataset.f?"":t.dataset.f;if(!e.f)delete e.f;
+    t.parentNode.querySelectorAll("button").forEach(function(b){b.classList.toggle("on",b.dataset.f===e.f)});
+    markDirty();
+  }
+  else if(t.classList.contains("swapbtn")){swapOpen=swapOpen===i?-1:i;lastExHtml=null;renderToday()}
+  else if(t.classList.contains("altchip")){auto=false;doSwap(i,t.dataset.name)}
+  else if(t.classList.contains("altgo")){
+    var nm=card.querySelector('input[data-k="altname"]').value.trim();
+    if(nm){auto=false;doSwap(i,nm)}
+  }
+  else if(t.classList.contains("mnote")){
+    var inp2=document.createElement("input");
+    inp2.className="mnin";inp2.type="text";inp2.dataset.k="note";inp2.value=notes[sl.id]||"";
+    inp2.placeholder="예: 의자 4칸 · 등받이 2 · 핀 3";inp2.setAttribute("autocomplete","off");
+    t.replaceWith(inp2);inp2.focus();
+  }
+});
+function commitNote(ev){
+  var t=ev.target;if(!t.classList||!t.classList.contains("mnin")||!cur)return;
+  var card=t.closest(".ex");if(!card)return;
+  var sl=curSlot(R[cur.routine].ex[+card.dataset.i]);
+  saveNote(sl.id,sl.name,t.value);
+  lastExHtml=null;setTimeout(renderToday,0);
+}
+$("#exlist").addEventListener("focusout",commitNote);
+$("#exlist").addEventListener("change",commitNote);
+$("#exlist").addEventListener("keydown",function(ev){
+  if(ev.key!=="Enter")return;
+  var t=ev.target;
+  if(t.classList.contains("mnin"))t.blur();
+  else if(t.dataset.k==="altname"){var b=t.parentNode.querySelector(".altgo");if(b)b.click()}
+});
+$("#memo").addEventListener("input",function(){if(!cur)return;cur.memo=this.value;markDirty()});
+$("#bw").addEventListener("input",function(){
+  if(!cur)return;
+  bwPending={date:cur.date,kg:this.value};updStatus();
+  clearTimeout(bwTimer);bwTimer=setTimeout(flushBody,900);
+});
+$("#seg").addEventListener("click",function(ev){var b=ev.target.closest("button");if(b&&cur&&b.dataset.r!==cur.routine){auto=false;openSession(cur.date,b.dataset.r)}});
+$("#date").addEventListener("change",function(){if(this.value&&cur){auto=false;openSession(this.value,cur.routine)}});
+
+/* ---------- 화면: 기록 ---------- */
+function vol(s){var t=0;Object.keys(s.ex||{}).forEach(function(k){var e=s.ex[k]||{};(e.reps||[]).forEach(function(r,i){t+=(num(setW(e,i))||0)*(num(r)||0)})});return Math.round(t)}
+function renderHist(){
+  var ids=Object.keys(sessions).filter(function(k){return sessions[k]&&sessions[k].date}).sort(function(a,b){return sessions[b].date.localeCompare(sessions[a].date)||b.localeCompare(a)});
+  if(!ids.length){$("#histlist").innerHTML='<div class="empty">아직 기록이 없어요.<br>오늘 운동 탭에서 입력하면 여기 쌓여요.</div>';return}
+  $("#histlist").innerHTML=ids.map(function(id){
+    var s=sessions[id],RT=R[s.routine];
+    var d=new Date(s.date+"T00:00:00"),dw="일월화수목금토"[d.getDay()]||"";
+    var info;
+    if(RT){var n=RT.ex.filter(function(x){var e=slotOf(s,x).e;return e&&isDone(x,e)}).length;info="완료 "+n+"/"+RT.ex.length+"종목 · 볼륨 "+vol(s).toLocaleString()+"kg"}
+    else info="지금 루틴 목록에 없는 기록 · 볼륨 "+vol(s).toLocaleString()+"kg";
+    return '<div class="it" data-id="'+esc(id)+'"><span class="rb" style="background:'+esc(color(s.routine))+'">'+esc(s.routine)+'</span><div class="meta"><b>'+esc(s.date.replace(/-/g,"."))+' ('+dw+')</b><span class="sub">'+esc(info)+(body[s.date]?' · '+esc(body[s.date])+'kg':'')+(s.memo?' · 📝':'')+(queue[id]?' · ⏳ 전송 대기':'')+'</span></div><button type="button" class="del">삭제</button></div>';
+  }).join("");
+}
+$("#histlist").addEventListener("click",function(ev){
+  var it=ev.target.closest(".it");if(!it)return;var id=it.dataset.id;
+  if(ev.target.classList.contains("del")){
+    var b=ev.target;
+    if(!b.classList.contains("arm")){b.classList.add("arm");b.textContent="정말 삭제";setTimeout(function(){b.classList.remove("arm");b.textContent="삭제"},3000);return}
+    var wasCur=cur&&cur.id===id;
+    if(wasCur){dirty=false;clearTimeout(saveTimer)}
+    delete sessions[id];saveCache();
+    queue[id]={op:"delete",n:++seq};saveQueue();
+    if(wasCur)openSession(cur.date,cur.routine);
+    renderWeek();renderHist();renderProg();updStatus();pump();return;
+  }
+  var s=sessions[id];if(!s||!R[s.routine])return;
+  auto=false;openSession(s.date,s.routine);tab("today");window.scrollTo(0,0);
+});
+
+/* ---------- 화면: 성장 ---------- */
+function spark(vals,W,H){
+  W=W||90;H=H||28;if(vals.length<2)return'<svg width="'+W+'" height="'+H+'"></svg>';
+  var mn=Math.min.apply(0,vals),mx=Math.max.apply(0,vals),rg=mx-mn||1;
+  var pts=vals.map(function(v,i){return (i*(W-6)/(vals.length-1)+3).toFixed(1)+","+(H-3-(v-mn)/rg*(H-6)).toFixed(1)});
+  var lp=pts[pts.length-1].split(",");
+  return'<svg width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'"><polyline points="'+pts.join(" ")+'" fill="none" stroke="var(--c)" stroke-width="2" stroke-linejoin="round"/><circle cx="'+lp[0]+'" cy="'+lp[1]+'" r="3" fill="var(--c)"/></svg>';
+}
+function signed(n){return (n>=0?"+":"")+(+n.toFixed(1))+"kg"}
+function progRow(id,name){
+  var pts=Object.keys(sessions).map(function(k){return sessions[k]}).filter(function(s){return s&&s.ex&&s.ex[id]&&num(s.ex[id].w)!=null&&(s.ex[id].reps||[]).some(function(v){return num(v)!=null})}).sort(function(a,b){return a.date.localeCompare(b.date)});
+  var ws=pts.map(function(s){return num(s.ex[id].w)});
+  var first=ws[0],lastW=ws[ws.length-1];
+  var info=pts.length?('기록 '+pts.length+'회'+(pts.length>1?' · 시작 '+fmtW(first)+' → '+signed(lastW-first):'')):'아직 기록 없음';
+  return '<div class="prow"><div class="pn"><b>'+esc(name)+'</b><span>'+esc(info)+'</span></div>'+spark(ws.slice(-12))+'<div class="pw">'+(pts.length?fmtW(lastW):'-')+'</div></div>';
+}
+function bodyCard(){
+  var ds=Object.keys(body).filter(function(d){return isDate(d)&&num(body[d])!=null}).sort();
+  var h='<div class="card prog bodyc" style="--c:#7c3aed"><h3>체중</h3>';
+  if(!ds.length)return h+'<div class="sub">오늘 운동 탭 위쪽의 체중 칸에 적으면 여기에 변화가 보여요.</div></div>';
+  var vals=ds.map(function(d){return num(body[d])}),lastD=ds[ds.length-1],lastV=vals[vals.length-1];
+  var info='기록 '+ds.length+'회 · 최근 '+lastD.slice(5).replace("-","/");
+  if(ds.length>1)info+=' · 처음보다 '+signed(lastV-vals[0]);
+  var cut=ymd(new Date(new Date(lastD+"T00:00:00Z").getTime()-28*864e5)),ref=null;
+  ds.forEach(function(d,i){if(d<=cut)ref=vals[i]});
+  if(ref!=null)info+=' · 4주 전보다 '+signed(lastV-ref);
+  return h+'<div class="big"><b>'+(+lastV)+'kg</b>'+spark(vals.slice(-20),150,40)+'</div><div class="sub" style="margin-top:6px">'+esc(info)+'</div></div>';
+}
+function renderProg(){
+  var h=bodyCard(),known={},alts={};
+  ORDER.forEach(function(r){
+    h+='<div class="card prog" style="--c:'+esc(color(r))+'"><h3>'+esc(R[r].title||r)+(R[r].archived?' <small>지난 루틴</small>':'')+'</h3>';
+    R[r].ex.forEach(function(x){known[x.id]=1;h+=progRow(x.id,x.name)});
+    h+='</div>';
+  });
+  Object.keys(sessions).forEach(function(k){var ex=(sessions[k]||{}).ex||{};Object.keys(ex).forEach(function(id){var e=ex[id];if(e&&e.sub&&!known[id])alts[id]=e.name||id.replace(/^alt:/,"")})});
+  var ak=Object.keys(alts);
+  if(ak.length){
+    h+='<div class="card prog" style="--c:#6b7280"><h3>대체 운동</h3>';
+    ak.forEach(function(id){h+=progRow(id,alts[id])});
+    h+='</div>';
+  }
+  $("#proglist").innerHTML=h;
+}
+
+/* ---------- 탭 ---------- */
+function tab(t){
+  document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.dataset.tab===t)});
+  $("#gear").classList.toggle("on",t==="set");
+  ["today","hist","prog","set"].forEach(function(k){$("#v-"+k).classList.toggle("hide",k!==t)});
+  if(t!=="today")flush();
+  if(t==="set")fillSettings();
+}
+document.querySelector("nav").addEventListener("click",function(ev){var b=ev.target.closest("button");if(b)tab(b.dataset.tab)});
+$("#gear").addEventListener("click",function(){tab($("#v-set").classList.contains("hide")?"set":"today")});
+$("#status").addEventListener("click",function(){
+  if(!cfg||net==="auth"){tab("set");return}
+  syncNow();
+});
+
+/* ---------- 설정 ---------- */
+function fillSettings(){
+  $("#welcome").classList.toggle("hide",!!cfg);
+  $("#cfg-url").value=cfg?cfg.url:"";
+  $("#cfg-token").value=cfg?cfg.token:"";
+  setMsg("","");
+  $("#ver").textContent="버전 "+VERSION;
+  updStatus();
+}
+function setMsg(text,kind){var m=$("#cfg-msg");m.textContent=text;m.className="msg"+(kind?" "+kind:"")}
+function readForm(){
+  var url=$("#cfg-url").value.trim(),token=$("#cfg-token").value.trim();
+  if(!url||!token){setMsg("주소와 토큰을 모두 입력해 주세요.","bad");return null}
+  if(!/^https?:\/\//.test(url)){setMsg("주소는 https:// 로 시작해야 해요.","bad");return null}
+  if(/script\.google\.com/.test(url)&&!/\/exec$/.test(url)){setMsg("주소가 /exec 로 끝나야 해요. (배포 화면의 '웹 앱 URL'을 복사하세요)","bad");return null}
+  return {url:url,token:token};
+}
+$("#cfg-test").addEventListener("click",function(){
+  var c=readForm();if(!c)return;
+  var b=this;b.disabled=true;setMsg("연결 확인 중…","");
+  api({action:"ping"},{cfg:c}).then(function(){
+    setMsg("✅ 연결됐어요! \"저장\"을 누르세요.","good");
+  },function(err){
+    var k=classify(err);
+    if(k==="auth")setMsg("❌ 토큰이 달라요. Apps Script의 TOKEN 값과 똑같은지 확인하세요.","bad");
+    else if(k==="server")setMsg("❌ 서버 오류: "+err.message,"bad");
+    else setMsg("❌ 연결하지 못했어요. 인터넷, 주소(/exec로 끝남), 배포의 액세스가 \"모든 사용자\"인지 확인하세요.","bad");
+  }).then(function(){b.disabled=false});
+});
+$("#cfg-save").addEventListener("click",function(){
+  var c=readForm();if(!c)return;
+  cfg=c;lsSet(LS.cfg,cfg);
+  net="ok";wantRefresh=true;initTried=false;
+  updStatus();pump();tab("today");
+});
+function syncNow(){
+  if(!cfg)return;
+  flush();
+  if(net!=="auth")net="ok";
+  wantRefresh=true;updStatus();pump();
+}
+$("#sync-now").addEventListener("click",function(){
+  if(!cfg){setMsg("먼저 위에서 연결을 저장해 주세요.","bad");return}
+  if(net==="auth")net="ok";
+  syncNow();
+});
+
+/* ---------- 휴식 타이머 ---------- */
+var tEnd=0,tId=null,tHide=null,actx=null,wake=null;
+// 아이폰은 진동이 안 되므로 소리로 알림. 소리는 버튼을 누른 순간에 미리 깨워 둬야 함.
+function primeAudio(){
+  try{
+    var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+    if(!actx)actx=new AC();
+    if(actx.state!=="running")actx.resume();
+    var s=actx.createBufferSource();s.buffer=actx.createBuffer(1,1,22050);s.connect(actx.destination);s.start(0);
+  }catch(e){}
+}
+function beep(){
+  try{
+    if(!actx)return;
+    if(actx.state!=="running")actx.resume();
+    var t=actx.currentTime+0.05;
+    [0,0.28,0.56].forEach(function(o,i){
+      var osc=actx.createOscillator(),g=actx.createGain();
+      osc.type="sine";osc.frequency.value=i===2?1175:880;
+      g.gain.setValueAtTime(0.0001,t+o);
+      g.gain.exponentialRampToValueAtTime(0.5,t+o+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+o+0.22);
+      osc.connect(g);g.connect(actx.destination);osc.start(t+o);osc.stop(t+o+0.25);
+    });
+  }catch(e){}
+}
+// 휴식 중에는 화면이 꺼지지 않게 (지원하는 기기에서만)
+function keepAwake(on){
+  try{
+    if(on){
+      if(!navigator.wakeLock||wake)return;
+      navigator.wakeLock.request("screen").then(function(w){
+        if(!tId){w.release();return}
+        wake=w;w.addEventListener("release",function(){if(wake===w)wake=null});
+      },function(){});
+    }else if(wake){wake.release();wake=null}
+  }catch(e){}
+}
+function tLeft(){return Math.ceil((tEnd-Date.now())/1000)}
+function showT(){var l=Math.max(0,tLeft()),s=l%60;$("#tleft").textContent=Math.floor(l/60)+":"+(s<10?"0":"")+s}
+function startTimer(sec){
+  clearInterval(tId);clearTimeout(tHide);
+  tEnd=Date.now()+sec*1000;
+  var el=$("#timer");el.classList.add("show");el.classList.remove("end");
+  showT();tId=setInterval(tick,250);keepAwake(true);
+}
+function tick(){
+  if(tLeft()>0){showT();return}
+  clearInterval(tId);tId=null;
+  $("#timer").classList.add("end");$("#tleft").textContent="GO!";
+  beep();
+  try{if(navigator.vibrate)navigator.vibrate([300,120,300])}catch(e){}
+  keepAwake(false);
+  tHide=setTimeout(function(){$("#timer").classList.remove("show")},5000);
+}
+function stopTimer(){clearInterval(tId);tId=null;clearTimeout(tHide);tEnd=0;$("#timer").classList.remove("show");keepAwake(false)}
+$("#tplus").addEventListener("click",function(){primeAudio();if(!tId){startTimer(30)}else{tEnd+=30000;showT()}});
+$("#tstop").addEventListener("click",stopTimer);
+
+/* ---------- 화면을 떠날 때 / 돌아올 때 ---------- */
+function onHide(){flush();beaconQueue()}
+function onShow(){
+  if(tId){tick();if(tId)keepAwake(true)}
+  if(!booted)return;
+  var t=today();
+  if(dayOpened&&t!==dayOpened){   // 앱을 켜 둔 채 날짜가 바뀐 경우
+    dayOpened=t;flush();auto=true;openSession(t,pickRoutine(t));
+  }
+  if(net==="offline"||net==="server")net="ok";
+  if(cfg&&Date.now()-lastRefresh>60000)wantRefresh=true;
+  updStatus();pump();
+}
+window.addEventListener("pagehide",onHide);
+document.addEventListener("visibilitychange",function(){if(document.hidden)onHide();else onShow()});
+window.addEventListener("online",function(){if(net==="offline")net="ok";updStatus();pump()});
+window.addEventListener("offline",function(){net="offline";updStatus()});
+
+/* ---------- 서버에서 새 데이터가 왔을 때 ---------- */
+function onData(){
+  if(!booted){start();return}
+  if(cur&&!dirty){
+    var act=document.activeElement,typing=act&&(act.tagName==="INPUT"||act.tagName==="TEXTAREA");
+    if(!typing){
+      var want=auto?pickRoutine(cur.date):cur.routine;
+      var s=sessions[cur.id];
+      if(auto&&want!==cur.routine)openSession(cur.date,want);
+      else if(s&&s.updatedAt!==cur.updatedAt){cur=clone(s);cur.id=sid(s.date,s.routine);renderToday()}
+      else if(!s){var id=cur.id;cur=blank(cur.date,cur.routine);cur.id=id;renderToday()}
+      else renderToday();
+    }
+  }
+  renderWeek();renderHist();renderProg();
+}
+
+/* ---------- 시작 ---------- */
+function loadRoutines(){
+  var cached=lsGet(LS.routines,null);   // 시트에서 마지막으로 받은 루틴
+  if(cached){try{setRoutines(cached);return Promise.resolve()}catch(e){}}
+  return fetch("routines.json",{cache:"no-cache"}).then(function(r){
+    if(!r.ok)throw new Error("routines");return r.json();
+  }).then(function(j){setRoutines(j)});
+}
+function start(){
+  if(booted)return;
+  booted=true;clearTimeout(bootTimer);
+  dayOpened=today();
+  openSession(dayOpened,pickRoutine(dayOpened));
+  renderHist();renderProg();updStatus();
+}
+function boot(){
+  cfg=lsGet(LS.cfg,null);if(!cfg||!cfg.url||!cfg.token)cfg=null;
+  sessions=lsGet(LS.sessions,{})||{};
+  notes=lsGet(LS.notes,{})||{};
+  body=lsGet(LS.body,{})||{};
+  setConf(lsGet(LS.config,{})||{});
+  view=lsGet(LS.view,"focus")==="list"?"list":"focus";
+  queue=lsGet(LS.queue,{})||{};
+  Object.keys(queue).forEach(function(k){
+    var j=queue[k];if(!j||!j.n){delete queue[k];return}
+    if(j.n>seq)seq=j.n;
+    if(j.op==="delete")delete sessions[k];else if(j.op==="save"&&j.d)sessions[k]=j.d;
+  });
+  updStatus();
+  loadRoutines().then(function(){
+    if(cfg)wantRefresh=true;
+    // 이 기기에 저장된 기록이 있으면 바로 보여 주고, 없으면 시트에서 받아올 때까지 잠깐 기다림
+    if(!cfg||Object.keys(sessions).length)start();
+    else bootTimer=setTimeout(start,8000);
+    pump();
+    if(!cfg)tab("set");
+  },function(){
+    $("#status").textContent="⚠️ 루틴을 불러오지 못함";
+    $("#exlist").innerHTML='<div class="card empty">루틴 데이터를 불러오지 못했어요.<br>인터넷 연결을 확인하고 다시 열어 주세요.</div>';
+  });
+}
+if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost")){
+  window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});
+}
+boot();
+</script>
+</body>
+</html>
