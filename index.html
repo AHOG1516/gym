@@ -60,6 +60,7 @@ details ul{margin:8px 0 0;padding-left:20px;font-size:14px}
 #dots button{width:22px;height:22px;border:0;background:transparent;padding:0;display:grid;place-items:center}
 #dots i{display:block;width:10px;height:10px;border-radius:50%;background:var(--ln)}
 #dots .done i{background:var(--ok)}
+#dots .skip i{background:var(--mu)}
 #dots .cur i{box-shadow:0 0 0 3px var(--c)}
 #exlist.focus .ex{display:none}
 #exlist.focus .ex.cur{display:block}
@@ -87,24 +88,35 @@ details ul{margin:8px 0 0;padding-left:20px;font-size:14px}
 .badge{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px}
 .b-up{background:#fee2e2;color:#b91c1c}.b-down{background:#dbeafe;color:#1d4ed8}.b-keep{background:#e5e7eb;color:#374151}.b-new{background:#fef3c7;color:#92400e}
 @media (prefers-color-scheme:dark){.b-keep{background:#374151;color:#e5e7eb}}
-.wrow{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.wrow label{font-size:13px;color:var(--mu);width:36px}
-.step{border:1px solid var(--ln);background:var(--soft);border-radius:10px;width:42px;height:42px;font-size:20px;font-weight:700;flex:none}
-.wrow input{width:90px;height:42px;text-align:center;border:1px solid var(--ln);background:var(--card);border-radius:10px;font-size:18px;font-weight:700}
-.wrow .unit{color:var(--mu);font-size:13px}
+.sethd{display:flex;align-items:baseline;gap:8px;margin-bottom:8px;font-size:12.5px;color:var(--mu)}
+.sethd b{font-size:14px;color:var(--tx)}
+.ex.done .sethd b{color:var(--ok)}
 .sets{display:grid;gap:8px}
-.set{display:flex;align-items:center;gap:5px}
-.set .sl{width:36px;flex:none;font-size:13px;color:var(--mu)}
-.set input{width:52px;min-width:0;height:42px;text-align:center;border:1px solid var(--ln);background:var(--card);border-radius:10px;font-size:17px;font-weight:700;padding:0 2px}
-.set input.sw{width:60px;font-size:15px;font-weight:600;color:var(--mu)}
-.set input.sw.ov{border-color:var(--amber);color:var(--tx)}
+.set{display:flex;align-items:center;gap:4px}
+.set .sl{width:20px;flex:none;font-size:13px;font-weight:700;color:var(--mu);text-align:center}
+.set.extra .sl{color:var(--amber)}
+.set .st{flex:none;width:30px;height:42px;padding:0;border:1px solid var(--ln);background:var(--soft);border-radius:9px;font-size:18px;font-weight:700}
+.set input{width:48px;min-width:0;height:42px;text-align:center;border:1px solid var(--ln);background:var(--card);border-radius:10px;font-size:17px;font-weight:700;padding:0 2px}
+.set input.sw{width:56px;font-size:16px}
 .set .u{font-size:12px;color:var(--mu);flex:none}
-.set .go{margin-left:auto;flex:none;border:0;background:var(--c);color:#fff;border-radius:10px;height:42px;padding:0 11px;font-weight:700;white-space:nowrap}
+.set .go{margin-left:auto;flex:none;border:0;background:var(--c);color:#fff;border-radius:10px;height:42px;padding:0 9px;font-size:15px;font-weight:700;white-space:nowrap}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.acts button{border:1px solid var(--ln);background:var(--soft);border-radius:10px;height:40px;padding:0 12px;font-size:13.5px;font-weight:600;color:var(--tx)}
+.acts .skipbtn{color:var(--mu)}
+.acts .skipbtn.arm{background:var(--up);border-color:var(--up);color:#fff}
+.acts .nextbtn{margin-left:auto;background:var(--c);border-color:var(--c);color:#fff}
+#exlist:not(.focus) .nextbtn{display:none}
+.ex:not(.done):not(.skipped) .nextbtn{background:var(--soft);border-color:var(--ln);color:var(--mu)}
+.ex.skipped .num{background:var(--mu)}
+.ex.skipped h2{color:var(--mu)}
+.skipmsg{margin-top:12px;font-size:13.5px;color:var(--mu)}
 .set.filled input[data-k=rep]{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--card))}
 .set.filled .go{background:var(--soft);color:var(--mu)}
-.feel{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:13px;color:var(--mu)}
-.feel button{border:1px solid var(--ln);background:var(--soft);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;color:var(--mu)}
-.feel button.on{background:var(--c);border-color:var(--c);color:#fff}
+.sf{display:none;gap:6px;margin:-2px 0 2px 24px}
+.set.filled+.sf{display:flex}
+.sf button{border:1px solid var(--ln);background:var(--soft);border-radius:999px;height:30px;padding:0 13px;font-size:12.5px;font-weight:600;color:var(--mu)}
+.sf button.on{background:var(--c);border-color:var(--c);color:#fff}
+.sf button.on[data-f=hard]{background:var(--up);border-color:var(--up)}
 .tips{margin-top:10px;border-top:1px dashed var(--ln);padding-top:8px}
 .tips ul{list-style:none;padding:0;margin:8px 0 0}
 .tips li{display:flex;gap:8px;padding:6px 0;font-size:14px}
@@ -185,7 +197,7 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
     <div id="exlist"></div>
     <div class="card"><details id="cool"><summary>🧘 마무리 스트레칭 (5분)</summary><ul></ul></details></div>
     <div class="card"><b style="font-size:14px">메모</b><textarea id="memo" placeholder="컨디션, 통증 등 그날의 메모"></textarea></div>
-    <p class="note">입력하면 자동으로 저장돼요. 규칙: 모든 세트 목표 달성 → 다음번 증량 (힘들었으면 한 번 더) / 첫 세트가 목표보다 2회 넘게 모자라면 → 감량</p>
+    <p class="note">입력하면 자동으로 저장돼요. 추천 규칙: 목표 횟수를 채운 가장 무거운 무게가 기준 → 그 무게로 전 세트를 채우면 다음번 증량 (힘들었으면 그대로) / 목표보다 2회 넘게 모자라면 감량</p>
   </section>
   <section id="v-hist" class="hide"><div class="card hist" id="histlist"></div></section>
   <section id="v-prog" class="hide"><div id="proglist"></div></section>
@@ -223,7 +235,7 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
 <div id="timer"><span>휴식</span><b id="tleft">0:00</b><button id="tplus" type="button">+30초</button><button id="tstop" type="button">끝</button></div>
 <script>
 "use strict";
-var VERSION = "1.1.0";
+var VERSION = "1.2.0";
 var LS = {cfg:"gym.cfg", sessions:"gym.sessions", queue:"gym.queue", routines:"gym.routines", notes:"gym.notes", body:"gym.body", config:"gym.config", view:"gym.view"};
 var LAB = {"세팅":"set_", "꿀팁":"tip", "주의":"warn"};
 var FEEL = {easy:"쉬움", ok:"적당", hard:"힘듦"};
@@ -243,6 +255,7 @@ var retryTimer = null, lastRefresh = 0;
 var booted = false, bootTimer = null, auto = true, dayOpened = "";
 var lastExHtml = null;
 var view = "focus", idx = 0, swapOpen = -1;
+var extra = {};                           // 운동별로 화면에 펼친 세트 줄 수 (추가 세트용, 저장하지 않음)
 
 var $ = function(s){return document.querySelector(s)};
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -439,26 +452,45 @@ function lastFor(exId,beforeDate,excludeId){
   Object.keys(sessions).forEach(function(k){
     if(k===excludeId)return;var s=sessions[k];
     if(!s||!s.ex||!s.ex[exId]||s.date>beforeDate)return;
-    var e=s.ex[exId];if(num(e.w)==null&&!(e.reps||[]).some(function(x){return num(x)!=null}))return;
-    if(!best||s.date>best.date)best={date:s.date,w:e.w,reps:e.reps||[],ws:e.ws||[],f:e.f||""};
+    var e=s.ex[exId];if(!(e.reps||[]).some(function(x){return num(x)!=null}))return;   // 횟수를 적은 기록만 "지난번"으로 침
+    if(!best||s.date>best.date)best={date:s.date,w:e.w,reps:e.reps||[],ws:e.ws||[],fs:e.fs||[],f:e.f||""};
   });
   return best;
 }
+// 다음에 쓸 무게 추천. 기준은 "목표 횟수를 채운 세트 중 가장 무거운 무게"(최고 세트).
+//  - 그 무게로 권장 세트를 전부 채웠으면 → 증량
+//  - 한두 세트만 그 무게였으면(세트마다 무게를 올린 날) → 다음엔 그 무게로 전 세트
+//  - 최고 무게 세트에 힘듦을 눌렀으면 → 올리지 않음. 전 세트를 못 채웠다면 한 단계 아래 성공 무게로
+//  - 목표를 채운 세트가 없고 가장 무거운 세트가 목표보다 2회 넘게 모자라면 → 감량
+// 난이도는 세트마다 적는다(e.fs[i]). 예전 기록은 운동 전체에 하나(e.f)라서 그 값을 모든 세트에 쓴다.
+function setF(e,i){return (e.fs&&e.fs[i])||e.f||""}
 function suggest(x,last,alt){
-  if(!last||num(last.w)==null)return {kind:"new",w:"",text:alt?"첫 기록 · 가볍게 시작해 맞는 무게를 찾으세요":"첫 기록 · 시작 무게: "+(x.start||"가볍게")};
-  var w=num(last.w),done=[];
-  (last.reps||[]).forEach(function(r,i){var n=num(r);if(n==null)return;var sw=num(setW(last,i));done.push({r:n,w:sw==null?w:sw})});
-  var first=done.slice(0,x.sets),full=done.length>=x.sets;
-  var minW=first.length?Math.min.apply(0,first.map(function(d){return d.w})):w;
-  var atW=full&&minW>=w;                                     // 모든 세트를 기본 무게 이상으로 했는가
-  var hitHi=first.every(function(d){return d.r>=x.hi}),hitLo=first.every(function(d){return d.r>=x.lo});
-  if(atW&&(hitHi||(last.f==="easy"&&x.lo<x.hi&&hitLo))){
-    if(last.f==="hard")return {kind:"keep",w:w,text:"= 같은 무게로 (지난번 힘듦)"};
-    var nw=+(minW+x.step).toFixed(1);
-    return {kind:"up",w:nw,text:minW>w?"↑ 증량 → "+nw+"kg":"↑ 증량 +"+x.step+"kg"};
+  var done=[];
+  if(last)(last.reps||[]).forEach(function(r,i){var n=num(r),w=num(setW(last,i));if(n!=null&&w!=null)done.push({r:n,w:w,f:setF(last,i)})});
+  if(!done.length)return {kind:"new",w:"",text:alt?"첫 기록 · 가볍게 시작해 맞는 무게를 찾으세요":"첫 기록 · 시작 무게: "+(x.start||"가볍게")};
+  var ok=done.filter(function(d){return d.r>=((d.f==="easy"&&x.lo<x.hi)?x.lo:x.hi)});
+  var ramp=done.some(function(d){return d.w!==done[0].w});
+  if(ok.length){
+    var W=Math.max.apply(0,ok.map(function(d){return d.w}));
+    var n=ok.filter(function(d){return d.w===W}).length;
+    if(done.some(function(d){return d.w===W&&d.f==="hard"})){
+      var lower=ok.map(function(d){return d.w}).filter(function(w){return w<W});
+      if(n<x.sets&&lower.length)return {kind:"keep",w:Math.max.apply(0,lower),text:"= 한 단계 낮춰서 (지난번 힘듦)"};
+      return {kind:"keep",w:W,text:"= 같은 무게로 (지난번 힘듦)"};
+    }
+    if(n>=x.sets)return {kind:"up",w:+(W+x.step).toFixed(1),text:"↑ 증량 +"+x.step+"kg"};
+    return {kind:"keep",w:W,text:ramp?"= 지난번 최고 무게로 전 세트":"= 같은 무게로"};
   }
-  if(done.length&&done[0].r<x.lo-2)return {kind:"down",w:Math.max(0,+(w-x.step).toFixed(1)),text:"↓ 감량 -"+x.step+"kg"};
-  return {kind:"keep",w:w,text:"= 같은 무게로"};
+  var Wm=Math.max.apply(0,done.map(function(d){return d.w}));
+  var top=done.filter(function(d){return d.w===Wm})[0];
+  if(top.r<x.lo-2)return {kind:"down",w:Math.max(0,+(Wm-x.step).toFixed(1)),text:"↓ 감량 -"+x.step+"kg"};
+  return {kind:"keep",w:Wm,text:"= 같은 무게로"};
+}
+// 그날 실제로 한 세트 중 가장 무거운 무게
+function topW(e){
+  var m=null;
+  (e.reps||[]).forEach(function(r,i){if(num(r)==null)return;var w=num(setW(e,i));if(w!=null&&(m==null||w>m))m=w});
+  return m;
 }
 function lastText(last){
   if(!last)return "아직 기록 없음";
@@ -468,7 +500,9 @@ function lastText(last){
     var w=setW(last,i);wsx.push(has(w)?(+w):"-");
     if(String(w)!==String(last.w))varied=true;
   });
-  return "지난번 "+last.date.slice(5).replace("-","/")+" · "+(varied?wsx.join("/")+"kg":fmtW(last.w))+" · "+(rs.join("/")||"-")+"회"+(FEEL[last.f]&&last.f!=="ok"?" · "+FEEL[last.f]:"");
+  var tw=topW(last),tf="";   // 가장 무거운 세트의 난이도만 덧붙임
+  (last.reps||[]).forEach(function(r,i){if(has(r)&&num(setW(last,i))===tw&&setF(last,i))tf=setF(last,i)});
+  return "지난번 "+last.date.slice(5).replace("-","/")+" · "+(varied?wsx.join("/")+"kg":fmtW(last.w))+" · "+(rs.join("/")||"-")+"회"+(FEEL[tf]&&tf!=="ok"?" · 최고 세트 "+FEEL[tf]:"");
 }
 function freshEntry(x,id,alt){
   var sg=suggest(x,lastFor(id,cur?cur.date:today(),cur?cur.id:""),alt);
@@ -491,7 +525,7 @@ function pickRoutine(date){
 }
 function firstUndone(){
   var ex=R[cur.routine].ex;
-  for(var i=0;i<ex.length;i++){var sl=slotOf(cur,ex[i]);if(!sl.e||!isDone(ex[i],sl.e))return i}
+  for(var i=0;i<ex.length;i++){if(!isOver(ex[i],slotOf(cur,ex[i]).e))return i}
   return 0;
 }
 function openSession(date,r){
@@ -499,7 +533,7 @@ function openSession(date,r){
   if(!R[r])r=ACTIVE[0];
   var id=sid(date,r),ex=sessions[id];
   cur=ex?clone(ex):blank(date,r);
-  cur.id=id;dirty=false;lastExHtml=null;swapOpen=-1;
+  cur.id=id;dirty=false;lastExHtml=null;swapOpen=-1;extra={};
   idx=firstUndone();
   renderToday();updStatus();
 }
@@ -513,7 +547,7 @@ function flush(){
   if(!dirty||!cur)return;
   dirty=false;
   var id=cur.id,d=clone(cur);delete d.id;d.updatedAt=new Date().toISOString();
-  Object.keys(d.ex).forEach(function(k){var e=d.ex[k];if(e&&e.ws&&!e.ws.some(has))delete e.ws});
+  Object.keys(d.ex).forEach(function(k){var e=d.ex[k];if(!e)return;if(e.ws&&!e.ws.some(has))delete e.ws;if(e.fs&&!e.fs.some(has))delete e.fs});
   sessions[id]=d;cur.updatedAt=d.updatedAt;saveCache();
   queue[id]={op:"save",d:d,n:++seq};saveQueue();
   setHint();renderWeek();renderHist();renderProg();updStatus();pump();
@@ -589,18 +623,41 @@ function renderWeek(){
   }
   $("#week").textContent=t;
 }
-function isDone(x,e){return (e.reps||[]).filter(has).length>=x.sets}
+// 권장 세트(x.sets)를 모두 적으면 완료. 그 뒤의 추가 세트는 선택.
+function isDone(x,e){var r=e.reps||[];for(var s=0;s<x.sets;s++)if(!has(r[s]))return false;return true}
+function isOver(x,e){return !!e&&(!!e.skip||isDone(x,e))}   // 완료했거나 건너뛴 운동
+function doneCount(x,e){var n=0;for(var s=0;s<x.sets;s++)if(has((e.reps||[])[s]))n++;return n}
+function rowCount(x,e,id){
+  var last=-1;(e.reps||[]).forEach(function(r,i){if(has(r))last=i});
+  return Math.max(x.sets,last+1,extra[id]||0);
+}
+function nextUndone(i){
+  var ex=R[cur.routine].ex,n=ex.length;
+  for(var j=1;j<n;j++){var k=(i+j)%n;if(!isOver(ex[k],slotOf(cur,ex[k]).e))return k}
+  return -1;
+}
 function cardHtml(x,i){
   var sl=curSlot(x),e=sl.e;
+  var head='<div class="hd"><span class="num"><span>'+(i+1)+'</span></span><div><h2>'+esc(sl.name)+'</h2><div class="sub">'+(sl.alt?esc(x.name)+' 대신 · ':(x.part?esc(x.part)+' · ':''))+x.sets+'×'+esc(x.reps)+' · 휴식 '+esc(x.restLabel)+'</div></div>'+
+      (e.skip?'':'<button type="button" class="swapbtn">'+(swapOpen===i?"닫기":"🔄 대체")+'</button>')+'</div>';
+  if(e.skip){
+    return '<div class="card ex skipped" data-i="'+i+'">'+head+
+      '<div class="skipmsg">오늘은 건너뛴 운동이에요. 기록에 남지 않고 다음 추천에도 쓰이지 않아요.</div>'+
+      '<div class="acts"><button type="button" class="unskip">건너뛰기 취소</button><button type="button" class="nextbtn">다음 운동 ▶</button></div></div>';
+  }
   var last=lastFor(sl.id,cur.date,cur.id),sg=suggest(x,last,sl.alt);
   var note=notes[sl.id]||"";
-  var sets="";
-  for(var s=0;s<x.sets;s++){
-    var v=e.reps[s],f=has(v),sw=setW(e,s),ov=has(e.ws&&e.ws[s])&&String(e.ws[s])!==String(e.w);
-    sets+='<div class="set'+(f?" filled":"")+'" data-s="'+s+'"><span class="sl">'+(s+1)+'세트</span>'+
-      '<input class="sw'+(ov?" ov":"")+'" inputmode="decimal" type="number" step="0.5" min="0" data-k="sw" value="'+esc(has(sw)?sw:"")+'" placeholder="kg" aria-label="'+(s+1)+'세트 무게"><span class="u">kg ×</span>'+
-      '<input inputmode="numeric" type="number" min="0" data-k="rep" value="'+(f?esc(v):"")+'" placeholder="'+x.hi+'" aria-label="'+(s+1)+'세트 횟수"><span class="u">회</span>'+
-      '<button type="button" class="go">'+(f?"완료":"✓ "+x.hi+"회")+'</button></div>';
+  var sets="",rows=rowCount(x,e,sl.id);
+  for(var s=0;s<rows;s++){
+    var v=e.reps[s],f=has(v),sw=setW(e,s);
+    sets+='<div class="set'+(f?" filled":"")+(s>=x.sets?" extra":"")+'" data-s="'+s+'"><span class="sl">'+(s>=x.sets?"+":"")+(s+1)+'</span>'+
+      '<button type="button" class="st" data-d="-1" aria-label="무게 내리기">−</button>'+
+      '<input class="sw" inputmode="decimal" type="number" step="0.5" min="0" data-k="sw" value="'+esc(has(sw)?sw:"")+'" placeholder="kg" aria-label="'+(s+1)+'세트 무게">'+
+      '<button type="button" class="st" data-d="1" aria-label="무게 올리기">+</button><span class="u">kg×</span>'+
+      '<input inputmode="numeric" type="number" min="0" data-k="rep" value="'+(f?esc(v):"")+'" placeholder="'+x.hi+'" aria-label="'+(s+1)+'세트 횟수">'+
+      '<button type="button" class="go">'+(f?"완료":"✓ "+x.hi+"회")+'</button></div>'+
+      // 세트를 마치면 그 줄 아래에 난이도 선택이 나타남 (CSS: .set.filled + .sf)
+      '<div class="sf" data-s="'+s+'">'+["easy","ok","hard"].map(function(k){return '<button type="button" data-f="'+k+'"'+(setF(e,s)===k?' class="on"':'')+'>'+FEEL[k]+'</button>'}).join("")+'</div>';
   }
   var swap="";
   if(swapOpen===i){
@@ -612,14 +669,13 @@ function cardHtml(x,i){
       (e.reps.some(has)?'<div class="w">바꾸면 이 운동에 입력한 횟수는 지워져요.</div>':'')+'</div>';
   }
   return '<div class="card ex'+(isDone(x,e)?" done":"")+'" data-i="'+i+'">'+
-    '<div class="hd"><span class="num"><span>'+(i+1)+'</span></span><div><h2>'+esc(sl.name)+'</h2><div class="sub">'+(sl.alt?esc(x.name)+' 대신 · ':(x.part?esc(x.part)+' · ':''))+x.sets+'×'+esc(x.reps)+' · 휴식 '+esc(x.restLabel)+'</div></div>'+
-      '<button type="button" class="swapbtn">'+(swapOpen===i?"닫기":"🔄 대체")+'</button></div>'+
+    head+
     swap+
     '<button type="button" class="mnote'+(note?" has":"")+'">'+(note?"⚙️ "+esc(note):"⚙️ 머신 세팅 메모 (의자 높이, 핀 위치 등)")+'</button>'+
     '<div class="last"><span>'+esc(lastText(last))+'</span><span class="badge b-'+sg.kind+'">'+esc(sg.text)+'</span></div>'+
-    '<div class="wrow"><label>무게</label><button type="button" class="step" data-d="-1">−</button><input inputmode="decimal" type="number" step="0.5" min="0" data-k="w" value="'+esc(e.w==null?"":e.w)+'" placeholder="kg" aria-label="기본 무게"><button type="button" class="step" data-d="1">+</button><span class="unit">kg <small>(0=기구만)</small></span></div>'+
+    '<div class="sethd"><b class="cnt">'+doneCount(x,e)+'/'+x.sets+'세트</b><span>세트를 마칠 때마다 ✓ · 무게 0 = 기구만</span></div>'+
     '<div class="sets">'+sets+'</div>'+
-    '<div class="feel"><span>난이도</span>'+["easy","ok","hard"].map(function(k){return '<button type="button" data-f="'+k+'"'+(e.f===k?' class="on"':'')+'>'+FEEL[k]+'</button>'}).join("")+'</div>'+
+    '<div class="acts"><button type="button" class="addset">+ 세트 추가</button><button type="button" class="skipbtn">건너뛰기</button><button type="button" class="nextbtn">다음 운동 ▶</button></div>'+
     (!sl.alt&&x.items.length?'<details class="tips"><summary>💡 세팅 · 꿀팁 · 주의</summary><ul>'+x.items.map(function(it){return'<li class="'+(LAB[it[0]]||"")+'"><b>'+esc(it[0])+'</b><span>'+esc(it[1])+'</span></li>'}).join("")+'</ul></details>':'')+
   '</div>';
 }
@@ -650,7 +706,8 @@ function applyFocus(){
   var ex=R[cur.routine].ex,dots="";
   cards.forEach(function(c,i){
     c.classList.toggle("cur",i===idx);
-    dots+='<button type="button" data-i="'+i+'" class="'+(c.classList.contains("done")?"done":"")+(i===idx?" cur":"")+'" aria-label="'+(i+1)+'번 운동"><i></i></button>';
+    var nb=c.querySelector(".nextbtn");if(nb)nb.classList.toggle("hide",i===n-1);
+    dots+='<button type="button" data-i="'+i+'" class="'+(c.classList.contains("done")?"done":c.classList.contains("skipped")?"skip":"")+(i===idx?" cur":"")+'" aria-label="'+(i+1)+'번 운동"><i></i></button>';
   });
   $("#stname").textContent=(idx+1)+" / "+n+" · "+slotOf(cur,ex[idx]).name;
   $("#dots").innerHTML=dots;
@@ -669,58 +726,78 @@ $("#viewseg").addEventListener("click",function(ev){
 function refreshCard(card){
   var x=R[cur.routine].ex[+card.dataset.i],e=curSlot(x).e;
   card.classList.toggle("done",isDone(x,e));
+  var cnt=card.querySelector(".cnt");if(cnt)cnt.textContent=doneCount(x,e)+"/"+x.sets+"세트";
   card.querySelectorAll(".set").forEach(function(row){var f=has(e.reps[+row.dataset.s]);row.classList.toggle("filled",f);row.querySelector(".go").textContent=f?"완료":"✓ "+x.hi+"회"});
   applyFocus();
 }
-// 기본 무게가 바뀌면, 따로 고치지 않은 세트의 무게도 따라감
-function syncSetW(card,e){
-  card.querySelectorAll(".set").forEach(function(row){
-    var s=+row.dataset.s,inp=row.querySelector(".sw");
-    var ov=has(e.ws&&e.ws[s])&&String(e.ws[s])!==String(e.w);
-    if(!ov){if(e.ws&&e.ws[s]!=null)e.ws[s]="";if(document.activeElement!==inp)inp.value=e.w}
-    inp.classList.toggle("ov",ov);
-  });
+// s번째 세트의 무게를 v로 바꾼다. 아직 횟수를 적지 않은 아래 세트는 같은 무게를 따라간다.
+// 저장 형식: e.w = 1세트 무게, e.ws[i] = 1세트와 다른 세트만 따로 적음.
+function applyW(card,e,s,v){
+  var rows=card.querySelectorAll(".set"),n=rows.length,ws=[],i;
+  for(i=0;i<n;i++){var c=setW(e,i);ws[i]=has(c)?String(c):""}
+  var old=ws[s];ws[s]=v;
+  for(i=s+1;i<n;i++)if(!has(e.reps[i])&&(ws[i]===old||ws[i]===""))ws[i]=v;   // 따로 고쳐 둔 세트는 건드리지 않음
+  e.w=ws[0];e.ws=[];
+  for(i=0;i<n;i++)e.ws[i]=(i===0||ws[i]===e.w)?"":ws[i];
+  rows.forEach(function(row,i){var inp=row.querySelector(".sw");if(i!==s||document.activeElement!==inp)inp.value=ws[i]});
 }
 $("#exlist").addEventListener("input",function(ev){
   var t=ev.target,card=t.closest(".ex"),k=t.dataset.k;if(!card||!cur)return;
-  if(k!=="w"&&k!=="sw"&&k!=="rep")return;
-  var x=R[cur.routine].ex[+card.dataset.i],e=curSlot(x).e,s;
-  if(k==="w"){e.w=t.value;syncSetW(card,e)}
-  if(k==="sw"){
-    s=+t.closest(".set").dataset.s;
-    if(!has(e.w)&&t.value!==""){   // 기본 무게가 비어 있으면 첫 입력이 기본 무게가 됨
-      e.w=t.value;card.querySelector('input[data-k="w"]').value=e.w;
-    }else{
-      if(!e.ws)e.ws=[];while(e.ws.length<=s)e.ws.push("");
-      e.ws[s]=(t.value===""||t.value===String(e.w))?"":t.value;
-    }
-    syncSetW(card,e);
-  }
-  if(k==="rep"){s=+t.closest(".set").dataset.s;while(e.reps.length<=s)e.reps.push("");e.reps[s]=t.value}
+  if(k!=="sw"&&k!=="rep")return;
+  var x=R[cur.routine].ex[+card.dataset.i],e=curSlot(x).e,s=+t.closest(".set").dataset.s;
+  if(k==="sw")applyW(card,e,s,t.value);
+  if(k==="rep"){while(e.reps.length<=s)e.reps.push("");e.reps[s]=t.value}
   refreshCard(card);markDirty();
 });
 $("#exlist").addEventListener("click",function(ev){
   var t=ev.target,card=t.closest(".ex");if(!card||!cur)return;
   var i=+card.dataset.i,x=R[cur.routine].ex[i],sl=curSlot(x),e=sl.e;
-  if(t.classList.contains("step")){
-    var w=num(e.w)||0;w=Math.max(0,+(w+(+t.dataset.d)*x.step).toFixed(1));e.w=String(w);
-    card.querySelector('input[data-k="w"]').value=e.w;syncSetW(card,e);markDirty();
+  if(t.classList.contains("st")){
+    var srow=t.closest(".set"),ss=+srow.dataset.s;
+    var w=Math.max(0,+((num(setW(e,ss))||0)+(+t.dataset.d)*x.step).toFixed(1));
+    applyW(card,e,ss,String(w));markDirty();
   }
   else if(t.classList.contains("go")){
     primeAudio();auto=false;
     var row=t.closest(".set"),s=+row.dataset.s,inp=row.querySelector('input[data-k="rep"]');
     if(inp.value===""){inp.value=x.hi;while(e.reps.length<=s)e.reps.push("");e.reps[s]=String(x.hi);markDirty()}
     refreshCard(card);
-    var n=R[cur.routine].ex.length;
-    if(s<x.sets-1||i<n-1)startTimer(x.rest);
-    if(view==="focus"&&isDone(x,e)&&i===idx){        // 종목을 끝내면 잠시 뒤 다음 종목으로
-      var nx=-1;for(var j=1;j<n;j++){var y=R[cur.routine].ex[(i+j)%n],se=slotOf(cur,y).e;if(!se||!isDone(y,se)){nx=(i+j)%n;break}}
-      if(nx>=0)setTimeout(function(){if(idx===i&&view==="focus"&&document.activeElement.tagName!=="INPUT")goIdx(nx)},900);
-    }
+    if(s<x.sets-1||i<R[cur.routine].ex.length-1)startTimer(x.rest);
   }
-  else if(t.closest(".feel")&&t.dataset.f){
-    e.f=e.f===t.dataset.f?"":t.dataset.f;if(!e.f)delete e.f;
-    t.parentNode.querySelectorAll("button").forEach(function(b){b.classList.toggle("on",b.dataset.f===e.f)});
+  else if(t.classList.contains("addset")){
+    var k=rowCount(x,e,sl.id),pw=setW(e,k-1);   // 새 줄은 바로 앞 세트의 무게로 시작
+    if(!e.ws)e.ws=[];while(e.ws.length<=k)e.ws.push("");
+    e.ws[k]=(has(pw)&&String(pw)!==String(e.w))?String(pw):"";
+    extra[sl.id]=k+1;lastExHtml=null;renderToday();
+  }
+  else if(t.classList.contains("skipbtn")){
+    if(e.reps.some(has)&&!t.classList.contains("arm")){   // 적어 둔 횟수가 있으면 한 번 더 확인
+      t.classList.add("arm");t.textContent="기록 지우고 건너뛰기";
+      setTimeout(function(){t.classList.remove("arm");t.textContent="건너뛰기"},3000);return;
+    }
+    auto=false;e.reps=[];delete e.ws;delete e.f;delete e.fs;e.skip=true;swapOpen=-1;markDirty();
+    var nx=view==="focus"?nextUndone(i):-1;
+    if(nx>=0)goIdx(nx);else{lastExHtml=null;renderToday()}
+  }
+  else if(t.classList.contains("unskip")){
+    delete e.skip;markDirty();lastExHtml=null;renderToday();
+  }
+  else if(t.classList.contains("nextbtn")){
+    var nu=nextUndone(i);
+    goIdx(nu>=0?nu:Math.min(i+1,R[cur.routine].ex.length-1));
+    var st=$("#stepper");if(st&&st.scrollIntoView)st.scrollIntoView({block:"start"});
+  }
+  else if(t.closest(".sf")&&t.dataset.f){
+    var fi=+t.parentNode.dataset.s;
+    if(!e.fs){   // 예전 방식(운동 전체에 하나)으로 적힌 값은 한 세트씩으로 풀어 둠
+      e.fs=[];
+      if(e.f)e.reps.forEach(function(r,j){if(has(r))e.fs[j]=e.f});
+      delete e.f;
+    }
+    while(e.fs.length<=fi)e.fs.push("");
+    for(var fj=0;fj<e.fs.length;fj++)if(!e.fs[fj])e.fs[fj]="";
+    e.fs[fi]=e.fs[fi]===t.dataset.f?"":t.dataset.f;   // 같은 걸 다시 누르면 지움
+    t.parentNode.querySelectorAll("button").forEach(function(b){b.classList.toggle("on",b.dataset.f===e.fs[fi])});
     markDirty();
   }
   else if(t.classList.contains("swapbtn")){swapOpen=swapOpen===i?-1:i;lastExHtml=null;renderToday()}
@@ -769,7 +846,11 @@ function renderHist(){
     var s=sessions[id],RT=R[s.routine];
     var d=new Date(s.date+"T00:00:00"),dw="일월화수목금토"[d.getDay()]||"";
     var info;
-    if(RT){var n=RT.ex.filter(function(x){var e=slotOf(s,x).e;return e&&isDone(x,e)}).length;info="완료 "+n+"/"+RT.ex.length+"종목 · 볼륨 "+vol(s).toLocaleString()+"kg"}
+    if(RT){
+      var n=RT.ex.filter(function(x){var e=slotOf(s,x).e;return e&&!e.skip&&isDone(x,e)}).length;
+      var sk=RT.ex.filter(function(x){var e=slotOf(s,x).e;return e&&e.skip}).length;
+      info="완료 "+n+"/"+RT.ex.length+"종목"+(sk?" · 건너뜀 "+sk:"")+" · 볼륨 "+vol(s).toLocaleString()+"kg";
+    }
     else info="지금 루틴 목록에 없는 기록 · 볼륨 "+vol(s).toLocaleString()+"kg";
     return '<div class="it" data-id="'+esc(id)+'"><span class="rb" style="background:'+esc(color(s.routine))+'">'+esc(s.routine)+'</span><div class="meta"><b>'+esc(s.date.replace(/-/g,"."))+' ('+dw+')</b><span class="sub">'+esc(info)+(body[s.date]?' · '+esc(body[s.date])+'kg':'')+(s.memo?' · 📝':'')+(queue[id]?' · ⏳ 전송 대기':'')+'</span></div><button type="button" class="del">삭제</button></div>';
   }).join("");
@@ -800,8 +881,9 @@ function spark(vals,W,H){
 }
 function signed(n){return (n>=0?"+":"")+(+n.toFixed(1))+"kg"}
 function progRow(id,name){
-  var pts=Object.keys(sessions).map(function(k){return sessions[k]}).filter(function(s){return s&&s.ex&&s.ex[id]&&num(s.ex[id].w)!=null&&(s.ex[id].reps||[]).some(function(v){return num(v)!=null})}).sort(function(a,b){return a.date.localeCompare(b.date)});
-  var ws=pts.map(function(s){return num(s.ex[id].w)});
+  // 그날의 최고 세트 무게로 변화를 본다
+  var pts=Object.keys(sessions).map(function(k){return sessions[k]}).filter(function(s){return s&&s.ex&&s.ex[id]&&topW(s.ex[id])!=null}).sort(function(a,b){return a.date.localeCompare(b.date)});
+  var ws=pts.map(function(s){return topW(s.ex[id])});
   var first=ws[0],lastW=ws[ws.length-1];
   var info=pts.length?('기록 '+pts.length+'회'+(pts.length>1?' · 시작 '+fmtW(first)+' → '+signed(lastW-first):'')):'아직 기록 없음';
   return '<div class="prow"><div class="pn"><b>'+esc(name)+'</b><span>'+esc(info)+'</span></div>'+spark(ws.slice(-12))+'<div class="pw">'+(pts.length?fmtW(lastW):'-')+'</div></div>';
