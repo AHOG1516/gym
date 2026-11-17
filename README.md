@@ -47,7 +47,7 @@ PC에서 1~3단계를 하고, 휴대폰에서 4단계를 하면 편합니다.
 2. 이름을 정하고(예: `gym`), **Public**을 고른 뒤 **Create repository**를 누릅니다.
 3. 다음 화면에서 **uploading an existing file** 링크를 누릅니다.
 4. 이 폴더의 아래 항목을 **끌어다 놓습니다.**
-   - `index.html`, `routines.json`, `manifest.webmanifest`, `sw.js`, `README.md`
+   - `index.html`, `research.html`, `routines.json`, `manifest.webmanifest`, `sw.js`, `README.md`
    - `icons` 폴더, `apps-script` 폴더
 5. 아래 **Commit changes**를 누릅니다.
 6. 저장소의 **Settings → Pages**로 가서, **Branch**를 `main` / `/ (root)`로 고르고 **Save**를 누릅니다.
@@ -96,6 +96,7 @@ PC에서 1~3단계를 하고, 휴대폰에서 4단계를 하면 편합니다.
 - **기록**: 지난 운동 목록. 누르면 열어서 고칠 수 있고, **삭제**는 두 번 눌러야 지워집니다.
 - **성장**: 체중 변화, 운동별 최근 무게와 변화 그래프.
 - **보충제**: 보충제 섭취 가이드(운동하는 날·쉬는 날에 먹을 것, 쉐이크 만드는 법, 조절 기준). 읽기 전용이고, 내용은 `index.html` 안에 적혀 있어 고치려면 파일을 수정해야 합니다.
+- **근거**: 루틴 운동별 논문 근거 정리(쉽게 보기·운동별 근거·주당 세트·참고문헌). 내용은 `research.html`에 있고, 이 파일은 브라우저에서 따로 열어도 됩니다.
 - 오른쪽 위 글자가 저장 상태입니다. **저장됨 ✓** 이면 시트까지 들어간 것입니다. 누르면 바로 동기화합니다.
 
 ### 알아 둘 점 (아이폰)
@@ -189,6 +190,7 @@ PC에서 1~3단계를 하고, 휴대폰에서 4단계를 하면 편합니다.
 
 ```
 index.html             앱 화면 (전부 이 한 파일)
+research.html          근거 탭에 나오는 논문 근거 문서 (따로 열어도 되는 읽기용 페이지)
 routines.json          기본 루틴 (처음 연결할 때 시트의 루틴 표를 채우는 데만 씀)
 manifest.webmanifest   홈 화면 설치 정보
 sw.js                  인터넷이 없어도 앱이 열리게 하는 캐시 (API 요청은 캐시하지 않음)

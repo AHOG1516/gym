@@ -189,7 +189,7 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
     <h1>💪 내 운동 기록</h1>
     <div class="tr"><button id="status" type="button">불러오는 중…</button><button id="gear" type="button" aria-label="설정">⚙️</button></div>
   </div>
-  <nav><button data-tab="today" class="on">오늘 운동</button><button data-tab="hist">기록</button><button data-tab="prog">성장</button><button data-tab="supp">보충제</button></nav>
+  <nav><button data-tab="today" class="on">오늘 운동</button><button data-tab="hist">기록</button><button data-tab="prog">성장</button><button data-tab="supp">보충제</button><button data-tab="docs">근거</button></nav>
 </header>
 <main>
   <section id="v-today">
@@ -270,6 +270,7 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
       </ul>
     </div>
   </section>
+  <section id="v-docs" class="hide"><div class="card empty" id="docsload">불러오는 중…</div></section>
   <section id="v-set" class="hide">
     <div class="card" id="welcome">
       <b>처음 한 번만 연결하면 돼요</b>
@@ -304,7 +305,7 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
 <div id="timer"><span>휴식</span><b id="tleft">0:00</b><button id="tplus" type="button">+30초</button><button id="tstop" type="button">끝</button></div>
 <script>
 "use strict";
-var VERSION = "1.4.1";
+var VERSION = "1.5.0";
 var LS = {cfg:"gym.cfg", sessions:"gym.sessions", queue:"gym.queue", routines:"gym.routines", notes:"gym.notes", body:"gym.body", config:"gym.config", view:"gym.view"};
 var LAB = {"세팅":"set_", "꿀팁":"tip", "주의":"warn"};
 var FEEL = {easy:"쉬움", ok:"적당", hard:"힘듦"};
@@ -994,9 +995,25 @@ function renderProg(){
 function tab(t){
   document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.dataset.tab===t)});
   $("#gear").classList.toggle("on",t==="set");
-  ["today","hist","prog","supp","set"].forEach(function(k){$("#v-"+k).classList.toggle("hide",k!==t)});
+  ["today","hist","prog","supp","docs","set"].forEach(function(k){$("#v-"+k).classList.toggle("hide",k!==t)});
   if(t!=="today")flush();
   if(t==="set")fillSettings();
+  if(t==="docs")loadDocs();
+}
+/* 근거 탭: research.html의 본문을 처음 열 때 한 번 가져와 붙인다 (오프라인이면 서비스워커 캐시에서) */
+var docsLoaded=false;
+function loadDocs(){
+  if(docsLoaded)return;
+  docsLoaded=true;
+  fetch("research.html").then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
+    var art=new DOMParser().parseFromString(t,"text/html").getElementById("doc");
+    if(!art)throw 0;
+    art.classList.add("in-app");
+    $("#v-docs").replaceChildren(document.adoptNode(art));
+  }).catch(function(){
+    docsLoaded=false;
+    $("#docsload").textContent="문서를 불러오지 못했어요. 인터넷 연결을 확인하고 탭을 다시 눌러 주세요.";
+  });
 }
 document.querySelector("nav").addEventListener("click",function(ev){var b=ev.target.closest("button");if(b)tab(b.dataset.tab)});
 $("#gear").addEventListener("click",function(){tab($("#v-set").classList.contains("hide")?"set":"today")});
