@@ -165,6 +165,18 @@ textarea{width:100%;min-height:70px;border:1px solid var(--ln);background:var(--
 .msg{font-size:13.5px;margin-top:10px;min-height:20px}
 .msg.good{color:var(--ok)}.msg.bad{color:var(--up)}
 ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
+.supp h3{margin:0 0 4px;font-size:16px}
+.supp ul.steps li{margin-bottom:6px}
+.supp .day{background:var(--soft);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14px}
+.supp .day b{display:block;margin-bottom:2px}
+.supp .mix{padding:10px 0;border-bottom:1px solid var(--ln);font-size:13.5px}
+.supp .mix:last-of-type{border:0}
+.supp .mix b{display:block;font-size:14.5px}
+.supp .facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.supp .facts span{background:var(--soft);border-radius:999px;padding:3px 10px;font-size:12.5px}
+.supp table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+.supp th,.supp td{padding:7px 4px;border-bottom:1px solid var(--ln);text-align:left}
+.supp th{color:var(--mu);font-weight:600}
 </style>
 </head>
 <body>
@@ -173,7 +185,7 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
     <h1>💪 내 운동 기록</h1>
     <div class="tr"><button id="status" type="button">불러오는 중…</button><button id="gear" type="button" aria-label="설정">⚙️</button></div>
   </div>
-  <nav><button data-tab="today" class="on">오늘 운동</button><button data-tab="hist">기록</button><button data-tab="prog">성장</button></nav>
+  <nav><button data-tab="today" class="on">오늘 운동</button><button data-tab="hist">기록</button><button data-tab="prog">성장</button><button data-tab="supp">보충제</button></nav>
 </header>
 <main>
   <section id="v-today">
@@ -203,6 +215,52 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
   </section>
   <section id="v-hist" class="hide"><div class="card hist" id="histlist"></div></section>
   <section id="v-prog" class="hide"><div id="proglist"></div></section>
+  <section id="v-supp" class="hide supp">
+    <div class="card">
+      <h3>🥤 보충제 섭취 가이드</h3>
+      <div class="sub">하루 2끼 기준 · 린매스 고구마 / 매스빌드업 / 크레아틴</div>
+      <div class="day"><b>운동하는 날</b>매스빌드업 쉐이크 1잔 + 린매스 쉐이크 1잔 + 크레아틴 3g<div class="sub">합계 약 995kcal · 단백질 약 78g</div></div>
+      <div class="day"><b>쉬는 날</b>린매스 쉐이크 1잔 + 크레아틴 3g<div class="sub">합계 약 410kcal · 단백질 약 41g</div></div>
+    </div>
+    <div class="card">
+      <h3>한 잔씩 만드는 법</h3>
+      <div class="mix"><b>매스빌드업 쉐이크</b>2스쿱(약 100g, 1서빙 3스쿱 중 2) + 우유 300ml
+        <div class="facts"><span>약 585kcal</span><span>단백질 약 37g</span><span>당류 약 36g</span><span>나트륨 약 390mg</span></div></div>
+      <div class="mix"><b>린매스 쉐이크</b>1서빙(55g) + 우유 300ml
+        <div class="facts"><span>약 400kcal</span><span>단백질 약 41g</span><span>당류 약 17g</span><span>나트륨 약 590mg</span></div></div>
+      <div class="mix"><b>크레아틴</b>1스푼(3g), 아무 쉐이크에 같이
+        <div class="facts"><span>10kcal</span><span>매일, 시간 무관</span><span>3g (최대 5g)</span></div></div>
+      <div class="hint">보충제 수치는 제품 영양성분표 기준, 우유는 일반 우유 300ml(약 195kcal · 단백질 9.6g · 당 14g · 나트륨 약 120mg)로 더한 값이에요. 스쿱 크기는 제품마다 달라서 기준은 무게예요(린매스 1서빙 55g, 매스빌드업 1스쿱 약 50g). 처음 한 번만 주방 저울로 재 보세요.</div>
+    </div>
+    <div class="card">
+      <h3>얼마나 가나</h3>
+      <table>
+        <tr><th>제품</th><th>1회</th><th>주당 사용</th><th>한 통 기간</th></tr>
+        <tr><td>매스빌드업 4kg</td><td>100g</td><td>3회 · 300g</td><td>약 13주</td></tr>
+        <tr><td>린매스 4kg</td><td>1서빙 55g</td><td>7회 · 385g</td><td>약 10주</td></tr>
+        <tr><td>크레아틴 600g × 2</td><td>3g</td><td>7회 · 21g</td><td>1년 이상</td></tr>
+      </table>
+      <div class="hint">매스빌드업은 주 3회 운동 기준이에요. 하루 걸러 운동하면(주 3~4회) 약 11주예요.</div>
+    </div>
+    <div class="card">
+      <h3>2주마다 조절하기</h3>
+      <ul class="steps">
+        <li><b>체중이 그대로면</b> 쉬는 날에도 매스빌드업 2스쿱을 한 잔 더 드세요.</li>
+        <li><b>체중이 주 0.5kg 넘게 늘고 체지방률이 오르면</b> 운동일 매스빌드업을 1스쿱으로 줄이세요.</li>
+        <li><b>목표 속도</b>는 주 0.2~0.3kg 증가예요. 인바디는 같은 시간대(아침 공복)에 재세요.</li>
+        <li><b>끼니를 평소보다 잘 먹은 날</b>은 린매스 한 잔을 건너뛰어도 돼요. 크레아틴은 그날도 드세요.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>섞을 때 팁</h3>
+      <ul class="steps">
+        <li>쉐이커에 <b>우유를 먼저</b> 붓고 가루를 넣으면 덜 뭉쳐요.</li>
+        <li>매스빌드업 2스쿱은 양이 많아요. 300ml로 되직하면 우유나 물을 100ml 더 넣으세요.</li>
+        <li>크레아틴을 먹는 동안은 <b>물을 하루 2L 정도</b> 마시세요.</li>
+        <li>두 제품 모두 나트륨이 있는 편이라, 쉐이크 2잔인 날은 국물·라면을 줄이면 좋아요.</li>
+      </ul>
+    </div>
+  </section>
   <section id="v-set" class="hide">
     <div class="card" id="welcome">
       <b>처음 한 번만 연결하면 돼요</b>
@@ -237,7 +295,7 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
 <div id="timer"><span>휴식</span><b id="tleft">0:00</b><button id="tplus" type="button">+30초</button><button id="tstop" type="button">끝</button></div>
 <script>
 "use strict";
-var VERSION = "1.3.0";
+var VERSION = "1.4.0";
 var LS = {cfg:"gym.cfg", sessions:"gym.sessions", queue:"gym.queue", routines:"gym.routines", notes:"gym.notes", body:"gym.body", config:"gym.config", view:"gym.view"};
 var LAB = {"세팅":"set_", "꿀팁":"tip", "주의":"warn"};
 var FEEL = {easy:"쉬움", ok:"적당", hard:"힘듦"};
@@ -927,7 +985,7 @@ function renderProg(){
 function tab(t){
   document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.dataset.tab===t)});
   $("#gear").classList.toggle("on",t==="set");
-  ["today","hist","prog","set"].forEach(function(k){$("#v-"+k).classList.toggle("hide",k!==t)});
+  ["today","hist","prog","supp","set"].forEach(function(k){$("#v-"+k).classList.toggle("hide",k!==t)});
   if(t!=="today")flush();
   if(t==="set")fillSettings();
 }
