@@ -169,6 +169,10 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
 .supp ul.steps li{margin-bottom:6px}
 .supp .day{background:var(--soft);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14px}
 .supp .day b{display:block;margin-bottom:2px}
+.supp .day b small{font-weight:500;color:var(--mu);font-size:12px;margin-left:4px}
+.supp .tl{list-style:none;margin:6px 0;padding:0}
+.supp .tl li{display:flex;gap:10px;padding:3px 0}
+.supp .tl span{flex:none;width:56px;color:var(--mu);font-size:13px}
 .supp .mix{padding:10px 0;border-bottom:1px solid var(--ln);font-size:13.5px}
 .supp .mix:last-of-type{border:0}
 .supp .mix b{display:block;font-size:14.5px}
@@ -219,8 +223,13 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
     <div class="card">
       <h3>🥤 보충제 섭취 가이드</h3>
       <div class="sub">하루 2끼 기준 · 린매스 고구마 / 매스빌드업 / 크레아틴</div>
-      <div class="day"><b>운동하는 날</b>매스빌드업 쉐이크 1잔 + 린매스 쉐이크 1잔 + 크레아틴 3g<div class="sub">합계 약 995kcal · 단백질 약 78g</div></div>
-      <div class="day"><b>쉬는 날</b>린매스 쉐이크 1잔 + 크레아틴 3g<div class="sub">합계 약 410kcal · 단백질 약 41g</div></div>
+      <div class="day"><b>운동하는 날 <small>오전 10~12시 운동</small></b>
+        <ul class="tl"><li><span>9시쯤</span>린매스 쉐이크 (운동 1시간 전)</li><li><span>12~1시</span>점심</li><li><span>3~4시</span>매스빌드업 쉐이크 + 크레아틴 3g</li><li><span>6~7시</span>저녁</li></ul>
+        <div class="sub">쉐이크 합계 약 995kcal · 단백질 약 78g</div></div>
+      <div class="day"><b>쉬는 날</b>
+        <ul class="tl"><li><span>9시쯤</span>린매스 쉐이크 + 크레아틴 3g</li><li><span>12~1시</span>점심</li><li><span>6~7시</span>저녁</li></ul>
+        <div class="sub">쉐이크 합계 약 410kcal · 단백질 약 41g</div></div>
+      <div class="hint">시간이 30분~1시간 어긋나도 괜찮아요. 운동 전 쉐이크가 더부룩하면 1시간 반 전으로 당기거나 우유 대신 물에 타세요.</div>
     </div>
     <div class="card">
       <h3>한 잔씩 만드는 법</h3>
@@ -295,7 +304,7 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
 <div id="timer"><span>휴식</span><b id="tleft">0:00</b><button id="tplus" type="button">+30초</button><button id="tstop" type="button">끝</button></div>
 <script>
 "use strict";
-var VERSION = "1.4.0";
+var VERSION = "1.4.1";
 var LS = {cfg:"gym.cfg", sessions:"gym.sessions", queue:"gym.queue", routines:"gym.routines", notes:"gym.notes", body:"gym.body", config:"gym.config", view:"gym.view"};
 var LAB = {"세팅":"set_", "꿀팁":"tip", "주의":"warn"};
 var FEEL = {easy:"쉬움", ok:"적당", hard:"힘듦"};

@@ -1,6 +1,6 @@
 // 서비스워커: 앱 화면 파일만 캐시해서 인터넷이 없어도 앱이 열리게 함.
 // 구글 시트(Apps Script)로 가는 요청은 절대 건드리지 않음.
-const CACHE = "gym-v5";
+const CACHE = "gym-v6";
 const ASSETS = [
   "./",
   "index.html",
