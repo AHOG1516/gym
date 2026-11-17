@@ -123,6 +123,8 @@ textarea.xm{min-height:46px;margin-top:10px;background:var(--card);font-size:16p
 .tips ul{list-style:none;padding:0;margin:8px 0 0}
 .tips li{display:flex;gap:8px;padding:6px 0;font-size:14px}
 .tips li b{flex:none;font-size:11.5px;padding:1px 8px;border-radius:999px;height:fit-content;margin-top:2px;background:var(--soft)}
+.evid{margin-top:10px;border-top:1px dashed var(--ln);padding-top:8px}
+.evid>.doc{font-size:14.5px;margin-top:6px}
 .tips .tip b{background:#fef3c7;color:#92400e}.tips .warn b{background:#fee2e2;color:#991b1b}.tips .set_ b{background:#e0e7ff;color:#3730a3}
 textarea{width:100%;min-height:70px;border:1px solid var(--ln);background:var(--soft);border-radius:10px;padding:10px;resize:vertical}
 .hist .it{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--ln);cursor:pointer}
@@ -305,7 +307,7 @@ ol.steps,ul.steps{margin:8px 0 0;padding-left:20px;font-size:14px}
 <div id="timer"><span>휴식</span><b id="tleft">0:00</b><button id="tplus" type="button">+30초</button><button id="tstop" type="button">끝</button></div>
 <script>
 "use strict";
-var VERSION = "1.5.0";
+var VERSION = "1.6.0";
 var LS = {cfg:"gym.cfg", sessions:"gym.sessions", queue:"gym.queue", routines:"gym.routines", notes:"gym.notes", body:"gym.body", config:"gym.config", view:"gym.view"};
 var LAB = {"세팅":"set_", "꿀팁":"tip", "주의":"warn"};
 var FEEL = {easy:"쉬움", ok:"적당", hard:"힘듦"};
@@ -750,6 +752,7 @@ function cardHtml(x,i){
     '<textarea class="xm" data-k="xm" rows="2" placeholder="이 운동 메모 (오늘 자세·느낌 등)">'+esc(e.m||"")+'</textarea>'+
     '<div class="acts"><button type="button" class="addset">+ 세트 추가</button><button type="button" class="skipbtn">건너뛰기</button><button type="button" class="nextbtn">다음 운동 ▶</button></div>'+
     (!sl.alt&&x.items.length?'<details class="tips"><summary>💡 세팅 · 꿀팁 · 주의</summary><ul>'+x.items.map(function(it){return'<li class="'+(LAB[it[0]]||"")+'"><b>'+esc(it[0])+'</b><span>'+esc(it[1])+'</span></li>'}).join("")+'</ul></details>':'')+
+    (!sl.alt&&EVID[sl.id]?'<details class="evid"><summary>📚 논문 근거</summary><div class="doc">'+EVID[sl.id]+'</div></details>':'')+
   '</div>';
 }
 function renderToday(){
@@ -1001,15 +1004,38 @@ function tab(t){
   if(t==="docs")loadDocs();
 }
 /* 근거 탭: research.html의 본문을 처음 열 때 한 번 가져와 붙인다 (오프라인이면 서비스워커 캐시에서) */
-var docsLoaded=false;
+var docsLoaded=false,docP=null,EVID={};
+function getDoc(){
+  if(!docP){
+    docP=fetch("research.html").then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){return new DOMParser().parseFromString(t,"text/html")});
+    docP.catch(function(){docP=null});
+  }
+  return docP;
+}
+/* 운동 카드의 "📚 논문 근거": research.html에서 data-ex가 붙은 운동 항목을 운동 id별로 뽑아 둔다 */
+function loadEvid(){
+  getDoc().then(function(doc){
+    var st=doc.querySelector("#doc style");
+    if(st&&!$("#docstyle")){var c=document.createElement("style");c.id="docstyle";c.textContent=st.textContent;document.head.appendChild(c)}
+    doc.querySelectorAll("details.dex[data-ex]").forEach(function(d){
+      var tg=d.querySelector(".tags"),h=tg?'<div class="tags">'+tg.innerHTML+'</div>':"";
+      for(var n=d.firstElementChild;n;n=n.nextElementSibling){if(n.tagName!=="SUMMARY")h+=n.outerHTML}
+      d.getAttribute("data-ex").split("|").forEach(function(id){EVID[id]=h});  // 이름표가 여러 개면 |로 구분
+    });
+    lastExHtml="";renderToday();
+  }).catch(function(){});
+}
 function loadDocs(){
   if(docsLoaded)return;
   docsLoaded=true;
-  fetch("research.html").then(function(r){if(!r.ok)throw 0;return r.text()}).then(function(t){
-    var art=new DOMParser().parseFromString(t,"text/html").getElementById("doc");
+  getDoc().then(function(doc){
+    var art=doc.getElementById("doc");
     if(!art)throw 0;
+    art=document.importNode(art,true);
     art.classList.add("in-app");
-    $("#v-docs").replaceChildren(document.adoptNode(art));
+    $("#v-docs").replaceChildren(art);
+    var js=art.querySelector("#docjs");  // 붙인 문서 안의 스크립트는 저절로 돌지 않아서 다시 실행
+    if(js){var s=document.createElement("script");s.text=js.text;document.body.appendChild(s)}
   }).catch(function(){
     docsLoaded=false;
     $("#docsload").textContent="문서를 불러오지 못했어요. 인터넷 연결을 확인하고 탭을 다시 눌러 주세요.";
@@ -1208,6 +1234,7 @@ if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostnam
   window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});
 }
 boot();
+loadEvid();
 </script>
 </body>
 </html>

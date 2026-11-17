@@ -37,9 +37,20 @@
 .doc td:first-child{font-weight:600;white-space:nowrap}
 .doc .wide td:first-child{white-space:normal;min-width:84px}
 .doc .dnum{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-.doc .dex{border-top:1px solid var(--d-ln);padding-top:6px;margin-top:18px}
-.doc .dex:first-of-type{border-top:0;margin-top:4px}
-.doc .dex h3{margin:10px 0 4px}
+.doc details>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:inherit;-webkit-user-select:none;user-select:none}
+.doc details>summary::-webkit-details-marker{display:none}
+.doc .sec>summary::after,.doc .dex>summary::after{content:"";float:none;margin:0 4px 4px auto;flex:none;width:9px;height:9px;border-right:2px solid var(--d-mu);border-bottom:2px solid var(--d-mu);transform:rotate(45deg);transition:transform .2s}
+.doc .sec[open]>summary::after,.doc .dex[open]>summary::after{content:"";margin-bottom:-4px;transform:rotate(-135deg)}
+.doc .sec>summary h2{margin:0}
+.doc .sec[open]>summary{margin-bottom:10px}
+.doc .dex{border-top:1px solid var(--d-ln);padding:10px 0 2px}
+.doc .dex>summary .st{flex:1;min-width:0}
+.doc .dex>summary h3{margin:0}
+.doc .dex>summary .tags{margin:4px 0 0}
+.doc .dex[open]>summary{margin-bottom:6px}
+.doc .dex[open]{padding-bottom:10px}
+.doc .all{display:flex;gap:6px;margin-top:10px}
+.doc .all button{flex:1;border:1px solid var(--d-ln);background:transparent;color:var(--d-mu);border-radius:10px;height:36px;font-size:13px;font-weight:600;font-family:inherit}
 .doc .tags{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
 .doc .tag{font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px;background:var(--d-soft);color:var(--d-mu)}
 .doc .tag.ok{background:var(--d-okbg);color:var(--d-ok)}
@@ -68,10 +79,11 @@
   <nav class="toc" aria-label="목차">
     <a href="#easy">쉽게 보기</a><a href="#summary">핵심 요약</a><a href="#principles">공통 원칙</a><a href="#ra">루틴 A</a><a href="#rb">루틴 B</a><a href="#sets">주당 세트</a><a href="#limits">한계</a><a href="#refs">참고문헌</a>
   </nav>
+  <div class="all"><button type="button" data-all="open">모두 펼치기</button><button type="button" data-all="close">모두 접기</button></div>
 </section>
 
-<section class="sec" id="easy">
-  <h2>쉽게 보기</h2>
+<details class="sec" id="easy" open>
+  <summary><h2>쉽게 보기</h2></summary>
   <div class="lead">지금 루틴 그대로 해도 됩니다. 머신만 써도 근육은 똑같이 자랍니다.</div>
 
   <h3>운동할 때 기억할 다섯 가지</h3>
@@ -114,10 +126,10 @@
     <li>전신 운동이라서 불리하지 않습니다. 12월에 상·하체로 나눠도 좋고, 지금처럼 해도 좋습니다.</li>
     <li>그립 너비, 발 위치 같은 세부 사항은 결과를 크게 바꾸지 않습니다. 편한 자세로 꾸준히 하는 쪽이 낫습니다.</li>
   </ul>
-</section>
+</details>
 
-<section class="sec" id="summary">
-  <h2>핵심 요약</h2>
+<details class="sec" id="summary">
+  <summary><h2>핵심 요약</h2></summary>
   <ul>
     <li><b>지금 루틴은 연구 근거와 큰 틀에서 맞습니다.</b> 머신 위주라서 불리하다는 근거는 없고, 전신을 번갈아 하는 방식도 주당 세트 수가 같다면 분할과 차이가 없었습니다.</li>
     <li><b>종목 선택보다 하는 방식이 더 중요합니다.</b> 연구들이 공통으로 가리키는 것은 충분한 세트 수, 힘들어질 때까지 하기, 무게를 조금씩 올리기입니다.</li>
@@ -127,10 +139,10 @@
     <li><b>근거의 강도는 종목마다 다릅니다.</b> 아래 운동별 설명에 <span class="tag ok">근육 크기 측정</span> 또는 <span class="tag warn">근전도만</span> 표시를 붙였습니다.</li>
     <li><b>조사 방법.</b> PubMed에서 논문 30편의 초록을 확인해 적었습니다. 본문 전체를 읽은 것은 아닙니다.</li>
   </ul>
-</section>
+</details>
 
-<section class="sec" id="principles">
-  <h2>공통 원칙</h2>
+<details class="sec" id="principles">
+  <summary><h2>공통 원칙</h2></summary>
   <p>모든 운동에 적용되는 원칙이고, 지금 루틴은 대체로 그 안에 있습니다. 손볼 곳은 휴식 60초인 운동 정도입니다.</p>
   <div class="tw"><table class="wide">
     <tr><th>원칙</th><th>논문이 말하는 것</th><th>내 루틴에 적용</th></tr>
@@ -142,15 +154,14 @@
     <tr><td>세트 사이 휴식</td><td>60초보다 길게 쉬면 근육 성장에 작은 이점이 있었고, 90초를 넘기면 더 차이가 없었습니다(9개 연구). <a class="src" href="https://doi.org/10.3389/fspor.2024.1429789">Singer 2024</a></td><td>휴식 60초인 팔 운동·레터럴 레이즈·카프레이즈는 경계선입니다. 90초가 근거에 더 가깝습니다.</td></tr>
     <tr><td>근육이 늘어난 자세</td><td>근육이 길게 늘어난 구간에서 훈련하면 근육이 더 클 수 있습니다(8개 연구, 120명). 저자들은 근거가 엇갈린다고 밝혔습니다. <a class="src" href="https://doi.org/10.1016/j.smhs.2025.03.001">Wolf 2025</a></td><td>무게를 늘리려고 내리는 깊이를 줄이지 않습니다. 가장 늘어나는 구간까지 천천히 내립니다.</td></tr>
   </table></div>
-</section>
+</details>
 
-<section class="sec" id="ra">
-  <h2>루틴 A — 운동별 근거</h2>
+<details class="sec" id="ra">
+  <summary><h2>루틴 A — 운동별 근거</h2></summary>
   <p class="dnote">"논문 근거"는 논문에 적힌 내용이고, "내 루틴에 적용"은 그 결과를 내 상황에 옮긴 해석입니다.</p>
 
-  <div class="dex">
-    <h3>시티드 레그프레스 · 3×10</h3>
-    <div class="tags"><span class="tag">허벅지 앞 · 엉덩이</span><span class="tag">근력 비교 + 근전도</span></div>
+  <details class="dex" data-ex="legpress|alt:시티드 레그프레스">
+    <summary><div class="st"><h3>시티드 레그프레스 · 3×10</h3><div class="tags"><span class="tag">허벅지 앞 · 엉덩이</span><span class="tag">근력 비교 + 근전도</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>스쿼트와 비교 (Rossi 2016).</b> 스쿼트만 / 레그프레스만 / 둘 다 하는 세 그룹이 10주 동안 주 2회, 회당 6세트(8~12RM)로 훈련했습니다. 스쿼트 최대 근력은 스쿼트 그룹이 더 늘었지만, 점프·균형 같은 기능 지표는 그룹 사이에 차이가 없었습니다. <a class="src" href="https://doi.org/10.23736/S0022-4707.16.06698-6">DOI</a></li>
@@ -161,11 +172,10 @@
       <li>발을 발판 가운데~조금 아래에 두면 허벅지 앞, 위쪽에 두면 엉덩이 쪽 비중이 커집니다. B일에 힙쓰러스트가 있으니 A일은 허벅지 앞 위주로 해도 됩니다.</li>
       <li>근전도는 "그 순간 얼마나 쓰이나"이지 "얼마나 자라나"가 아닙니다. 발 위치는 미세 조정 수준으로 보면 됩니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>체스트프레스 머신 · 3×10</h3>
-    <div class="tags"><span class="tag">가슴 · 어깨 앞 · 팔 뒤</span><span class="tag ok">근육 크기 측정</span></div>
+  <details class="dex" data-ex="chestpress">
+    <summary><div class="st"><h3>체스트프레스 머신 · 3×10</h3><div class="tags"><span class="tag">가슴 · 어깨 앞 · 팔 뒤</span><span class="tag ok">근육 크기 측정</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>머신 대 프리웨이트 (Schwanbeck 2020).</b> 46명을 프리웨이트 그룹과 머신 그룹으로 나눠 8주간 훈련했습니다. 근육 두께 증가는 두 그룹이 같았습니다. 머신 벤치 근력은 머신 그룹이 더 늘었고(13.9% 대 8.6%), 프리웨이트 벤치·스쿼트 근력은 두 그룹 모두 11~19% 늘어 차이가 없었습니다. <a class="src" href="https://doi.org/10.1519/JSC.0000000000003349">DOI</a></li>
@@ -175,11 +185,10 @@
       <li>가슴을 키우는 데 머신 체스트프레스가 벤치프레스보다 불리하다는 근거는 없습니다.</li>
       <li>손잡이가 가슴 옆까지 충분히 내려오도록 좌석 높이를 맞추고, 가슴이 늘어나는 구간을 건너뛰지 않습니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>랫풀다운 · 3×10</h3>
-    <div class="tags"><span class="tag">등 · 팔 앞</span><span class="tag warn">근전도만</span></div>
+  <details class="dex" data-ex="latpull">
+    <summary><div class="st"><h3>랫풀다운 · 3×10</h3><div class="tags"><span class="tag">등 · 팔 앞</span><span class="tag warn">근전도만</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>그립 너비 (Andersen 2014).</b> 남성 15명이 어깨너비의 1배·1.5배·2배로 잡고 6RM을 했습니다. 든 무게는 80.3kg·80kg·77.3kg이었고 광배근 활성은 비슷했습니다. 어깨너비 1~2배 안에서는 비슷한 결과를 기대할 수 있다고 정리했습니다. <a class="src" href="https://doi.org/10.1097/JSC.0000000000000232">DOI</a></li>
@@ -189,11 +198,10 @@
       <li>어깨너비보다 조금 넓게(약 1.5배), 손등이 위로 오게 잡고 얼굴 앞으로 당기면 됩니다.</li>
       <li>두 연구 모두 근전도 연구이고 남성만 대상이었습니다. 장기간 근육 성장을 직접 비교한 것은 아닙니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>라잉 레그컬 · 3×12</h3>
-    <div class="tags"><span class="tag">허벅지 뒤</span><span class="tag ok">근육 크기 측정 (MRI)</span></div>
+  <details class="dex" data-ex="legcurl">
+    <summary><div class="st"><h3>라잉 레그컬 · 3×12</h3><div class="tags"><span class="tag">허벅지 뒤</span><span class="tag ok">근육 크기 측정 (MRI)</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>앉아서 대 엎드려서 (Maeo 2021).</b> 20명이 한쪽 다리는 앉아서, 다른 쪽은 엎드려서 12주간 레그컬을 했습니다. MRI로 잰 햄스트링 부피는 앉아서 +14%, 엎드려서 +9% 늘었습니다. 차이는 엉덩이와 무릎을 모두 지나는 근육에서 났습니다. <a class="src" href="https://doi.org/10.1249/MSS.0000000000002523">DOI</a></li>
@@ -203,11 +211,10 @@
       <li>헬스장에서 시티드 레그컬 머신은 아직 확인하지 못했습니다. 있다면 바꿔 볼 가치가 있는 유일한 자리입니다.</li>
       <li>엉덩이가 들리지 않게 하고, 다리를 거의 다 펴는 지점까지 천천히 내립니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>숄더프레스 머신 · 2×12</h3>
-    <div class="tags"><span class="tag">어깨 앞·옆 · 팔 뒤</span><span class="tag warn">근전도만</span></div>
+  <details class="dex" data-ex="shoulderpress">
+    <summary><div class="st"><h3>숄더프레스 머신 · 2×12</h3><div class="tags"><span class="tag">어깨 앞·옆 · 팔 뒤</span><span class="tag warn">근전도만</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>자세와 도구 (Saeterbakken·Fimland 2013).</b> 남성 15명의 근전도입니다. 가장 불안정한 방식(서서 덤벨)에서 삼각근 활성이 가장 높았지만 들 수 있는 무게는 가장 낮았습니다. <a class="src" href="https://doi.org/10.1519/JSC.0b013e318276b873">DOI</a></li>
@@ -216,11 +223,10 @@
       <li>머신은 가장 안정적이라 근전도 수치는 낮을 수 있지만, 그만큼 무게를 안전하게 올리기 쉽습니다. 장기 근육 성장은 머신과 프리웨이트가 비슷했습니다(Haugen 2023).</li>
       <li>프레스는 어깨 앞쪽 비중이 큽니다. 어깨 옆은 B일의 레터럴 레이즈가 맡습니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>바이셉 컬 머신 · 2×12</h3>
-    <div class="tags"><span class="tag">팔 앞</span><span class="tag ok">근육 크기 측정</span></div>
+  <details class="dex" data-ex="armcurl">
+    <summary><div class="st"><h3>바이셉 컬 머신 · 2×12</h3><div class="tags"><span class="tag">팔 앞</span><span class="tag ok">근육 크기 측정</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>움직임의 어느 절반이 중요한가 (Pedrosa 2023).</b> 여성 19명이 한 팔은 "편 쪽 절반"만, 다른 팔은 "굽힌 쪽 절반"만 8주간 했습니다. 편 쪽 절반으로 훈련한 팔이 이두근 아래쪽 단면적과 1RM이 더 늘었습니다. <a class="src" href="https://doi.org/10.3390/sports11020039">DOI</a></li>
@@ -230,11 +236,10 @@
       <li>팔을 끝까지 펴는 구간을 빼먹지 않는 것이 가장 중요합니다. 반만 내렸다 올리면 효과가 좋은 구간을 버리는 셈입니다.</li>
       <li>머신 종류에 따른 차이는 작습니다. 편한 쪽을 쓰면 됩니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>카프레이즈 머신 · 2×15</h3>
-    <div class="tags"><span class="tag">종아리</span><span class="tag ok">근육 크기 측정</span><span class="tag new">11월 17일 추가</span></div>
+  <details class="dex" data-ex="calfraise">
+    <summary><div class="st"><h3>카프레이즈 머신 · 2×15</h3><div class="tags"><span class="tag">종아리</span><span class="tag ok">근육 크기 측정</span><span class="tag new">11월 17일 추가</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>어느 구간이 중요한가 (Kassiano 2023).</b> 젊은 여성 42명의 8주 연구에서 발뒤꿈치를 깊이 내린 구간만 훈련한 그룹의 종아리 안쪽 근육이 +15.2% 자라, 전체 범위(+6.7%)나 위쪽 구간만 한 그룹(+3.4%)보다 많이 자랐습니다. <a class="src" href="https://doi.org/10.1519/JSC.0000000000004460">DOI</a></li>
@@ -243,15 +248,14 @@
       <li>발뒤꿈치를 끝까지 내려 종아리가 쭉 늘어나는 구간을 꼭 지나갑니다. 위에서 까딱까딱하는 것보다 아래쪽이 중요합니다.</li>
       <li>여성만 대상인 연구이고, 기구도 다를 수 있습니다.</li>
     </ul></div>
-  </div>
-</section>
+  </details>
+</details>
 
-<section class="sec" id="rb">
-  <h2>루틴 B — 운동별 근거</h2>
+<details class="sec" id="rb">
+  <summary><h2>루틴 B — 운동별 근거</h2></summary>
 
-  <div class="dex">
-    <h3>브이 스쿼트 머신 · 3×10</h3>
-    <div class="tags"><span class="tag">허벅지 앞 · 엉덩이 · 허벅지 안쪽</span><span class="tag ok">근육 크기 측정 (MRI)</span></div>
+  <details class="dex" data-ex="squat">
+    <summary><div class="st"><h3>브이 스쿼트 머신 · 3×10</h3><div class="tags"><span class="tag">허벅지 앞 · 엉덩이 · 허벅지 안쪽</span><span class="tag ok">근육 크기 측정 (MRI)</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>깊이 (Kubo 2019).</b> 남성 17명을 깊은 스쿼트와 절반 스쿼트 그룹으로 나눠 10주간 훈련했습니다. 허벅지 앞은 비슷하게 늘었지만(+4.9% 대 +4.6%), 엉덩이(+6.7% 대 +2.2%)와 허벅지 안쪽(+6.2% 대 +2.7%)은 깊은 스쿼트가 더 늘었습니다. 대퇴직근과 햄스트링은 두 그룹 모두 변화가 없었습니다. <a class="src" href="https://doi.org/10.1007/s00421-019-04181-y">DOI</a></li>
@@ -261,11 +265,10 @@
       <li>스쿼트만으로는 대퇴직근과 햄스트링이 자라지 않았습니다. 레그 익스텐션과 레그컬이 따로 있어야 하는 이유입니다.</li>
       <li>바벨 스쿼트로 한 연구입니다. 브이 스쿼트 머신 연구는 확인하지 못했습니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>인클라인 체스트프레스 머신 · 3×10</h3>
-    <div class="tags"><span class="tag">가슴 위쪽 · 어깨 앞</span><span class="tag ok">근육 크기 측정</span></div>
+  <details class="dex" data-ex="inclinepress">
+    <summary><div class="st"><h3>인클라인 체스트프레스 머신 · 3×10</h3><div class="tags"><span class="tag">가슴 위쪽 · 어깨 앞</span><span class="tag ok">근육 크기 측정</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>수평 대 인클라인 (Chaves 2020).</b> 남성 47명이 수평만 / 인클라인만 / 둘 다 하는 세 그룹으로 8주간 훈련했습니다. 근력은 같았고, 가슴 두께는 위쪽 가슴 한 곳에서만 인클라인 그룹이 가장 많이 늘었습니다. <a class="src" href="https://doi.org/10.70252/FDNB1158">DOI</a></li>
@@ -274,11 +277,10 @@
       <li>A일 수평 프레스와 B일 인클라인을 번갈아 하는 지금 구성은 가슴 위·가운데를 고르게 자극합니다.</li>
       <li>주 1회, 8주, 바벨로 한 연구라 머신에 그대로 들어맞는다고 단정할 수는 없습니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>시티드 로우 · 3×10</h3>
-    <div class="tags"><span class="tag">등 가운데 · 광배근 · 팔 앞</span><span class="tag warn">근전도만</span></div>
+  <details class="dex" data-ex="row">
+    <summary><div class="st"><h3>시티드 로우 · 3×10</h3><div class="tags"><span class="tag">등 가운데 · 광배근 · 팔 앞</span><span class="tag warn">근전도만</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>당기는 방향 (Lehman 2004).</b> 풀다운과 시티드 로우의 근전도를 비교했습니다. 등 가운데 근육 활성은 시티드 로우에서 가장 높았고, 날개뼈를 일부러 모으는 것은 영향이 없었습니다. 저자들은 종목 간 차이가 작다고 결론지었습니다. <a class="src" href="https://doi.org/10.1186/1476-5918-3-4">DOI</a></li>
@@ -287,11 +289,10 @@
       <li>A일 랫풀다운(위→아래)과 B일 로우(앞→뒤)는 서로 보완합니다.</li>
       <li>20년 전의 작은 근전도 연구라 근거가 약합니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>힙쓰러스트 머신 · 2×12</h3>
-    <div class="tags"><span class="tag">엉덩이</span><span class="tag ok">근육 크기 측정 (MRI)</span></div>
+  <details class="dex" data-ex="hipthrust">
+    <summary><div class="st"><h3>힙쓰러스트 머신 · 2×12</h3><div class="tags"><span class="tag">엉덩이</span><span class="tag ok">근육 크기 측정 (MRI)</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>힙쓰러스트 대 스쿼트 (Plotkin 2023).</b> 대학생 34명을 두 그룹으로 나눠 9주간 훈련했습니다. 엉덩이 성장은 비슷했고, 허벅지 앞·안쪽은 스쿼트 그룹이 더 자랐으며, 햄스트링은 두 그룹 모두 거의 자라지 않았습니다. 엉덩이 근전도는 힙쓰러스트가 더 높았지만 실제 성장 차이로 이어지지 않았습니다. <a class="src" href="https://doi.org/10.3389/fphys.2023.1279170">DOI</a> · 2026년 <a class="src" href="https://doi.org/10.3389/fphys.2026.1987823">정정 공지</a>(내용 미확인)</li>
@@ -300,11 +301,10 @@
       <li>B일에는 브이 스쿼트도 있어 엉덩이 자극이 겹치므로 2세트면 적당합니다.</li>
       <li>"근전도가 높은 운동이 더 키운다"는 통념이 틀릴 수 있음을 보여 준 연구입니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>레그 익스텐션 · 2×12</h3>
-    <div class="tags"><span class="tag">허벅지 앞 (대퇴직근)</span><span class="tag ok">근육 크기 측정</span></div>
+  <details class="dex" data-ex="legext">
+    <summary><div class="st"><h3>레그 익스텐션 · 2×12</h3><div class="tags"><span class="tag">허벅지 앞 (대퇴직근)</span><span class="tag ok">근육 크기 측정</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>등받이 각도 (Larsen 2024).</b> 남성 22명이 한쪽 다리는 상체를 세우고, 다른 쪽은 뒤로 젖힌 자세로 10주간 했습니다. 대퇴직근은 뒤로 젖힌 쪽이 분명히 더 자랐습니다. <a class="src" href="https://doi.org/10.1080/02640414.2024.2444713">DOI</a></li>
@@ -314,17 +314,15 @@
       <li>스쿼트·레그프레스로는 대퇴직근이 잘 자라지 않으므로 레그 익스텐션을 넣은 것은 근거에 맞습니다.</li>
       <li>등받이를 뒤로 조절할 수 있으면 조금 젖히고, 무릎이 깊이 굽혀진 위치에서 시작합니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>라잉 레그컬 · 2×12</h3>
-    <div class="tags"><span class="tag">허벅지 뒤</span><span class="tag ok">근육 크기 측정 (MRI)</span><span class="tag new">11월 17일 추가</span></div>
+  <details class="dex">
+    <summary><div class="st"><h3>라잉 레그컬 · 2×12</h3><div class="tags"><span class="tag">허벅지 뒤</span><span class="tag ok">근육 크기 측정 (MRI)</span><span class="tag new">11월 17일 추가</span></div></div></summary>
     <p>근거는 <a href="#ra">루틴 A의 라잉 레그컬</a>과 같습니다. 스쿼트와 힙쓰러스트로는 햄스트링이 거의 자라지 않아서(Kubo 2019, Plotkin 2023) B일에도 2세트를 넣었습니다. A일과 같은 기록을 이어서 씁니다.</p>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>레터럴 레이즈 머신 · 2×15</h3>
-    <div class="tags"><span class="tag">어깨 옆</span><span class="tag warn">근전도만</span></div>
+  <details class="dex" data-ex="lateral">
+    <summary><div class="st"><h3>레터럴 레이즈 머신 · 2×15</h3><div class="tags"><span class="tag">어깨 옆</span><span class="tag warn">근전도만</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>팔 돌림 방향 (Coratella 2020).</b> 보디빌더 10명의 덤벨 레터럴 레이즈 근전도입니다. 팔을 중립으로 둔 방식이 어깨 옆 활성이 가장 높았고, 엄지를 아래로 돌리면 어깨 뒤·승모근 활성이 커졌습니다. <a class="src" href="https://doi.org/10.3390/ijerph17176015">DOI</a></li>
@@ -334,11 +332,10 @@
       <li>어깨를 으쓱하지 않고 팔꿈치로 밀어 올린다는 느낌으로 합니다.</li>
       <li>덤벨 연구라 머신에 그대로 옮길 수는 없습니다.</li>
     </ul></div>
-  </div>
+  </details>
 
-  <div class="dex">
-    <h3>트라이셉 익스텐션 머신 · 2×12</h3>
-    <div class="tags"><span class="tag">팔 뒤</span><span class="tag ok">근육 크기 측정</span></div>
+  <details class="dex" data-ex="tricepsext">
+    <summary><div class="st"><h3>트라이셉 익스텐션 머신 · 2×12</h3><div class="tags"><span class="tag">팔 뒤</span><span class="tag ok">근육 크기 측정</span></div></div></summary>
     <h4>논문 근거</h4>
     <ul>
       <li><b>프레스만으로 충분한가 (Brandão 2020).</b> 남성 43명. 벤치프레스만 한 그룹은 삼두근 전체가 유의하게 늘지 않았고, 장두는 삼두 단독 운동을 한 그룹에서만 더 자랐습니다. <a class="src" href="https://doi.org/10.1519/JSC.0000000000003550">DOI</a></li>
@@ -348,11 +345,11 @@
       <li>프레스가 있어도 삼두 단독 운동을 따로 하는 것이 근거에 맞습니다.</li>
       <li>지금 머신은 팔이 몸 앞에 놓이는 형태일 가능성이 높아(추정) 그 중간쯤입니다. 팔꿈치를 깊이 굽히는 구간을 충분히 쓰는 것으로 보완합니다.</li>
     </ul></div>
-  </div>
-</section>
+  </details>
+</details>
 
-<section class="sec" id="sets">
-  <h2>부위별 주당 세트</h2>
+<details class="sec" id="sets">
+  <summary><h2>부위별 주당 세트</h2></summary>
   <p>월·수·금 주 3회, A와 B를 번갈아 하는 기준입니다(A·B 각각 평균 주 1.5회). 11월 17일에 추가한 두 종목을 반영했습니다.</p>
   <div class="tw"><table>
     <tr><th>부위</th><th>직접 하는 종목 (A / B)</th><th class="dnum">주당</th></tr>
@@ -375,10 +372,10 @@
     <li><b>무게를 올리는 방식.</b> 미국스포츠의학회 입장문(ACSM 2009)은 초보자에게 8~12RM 무게를 권하고, 목표 횟수보다 1~2회 더 할 수 있게 되면 무게를 2~10% 올리라고 권합니다. 앱의 추천 규칙과 같은 방식입니다. <a class="src" href="https://doi.org/10.1249/MSS.0b013e3181915670">DOI</a></li>
     <li><b>남은 확인 거리.</b> 헬스장에 시티드 레그컬 머신이 있는지 보면 됩니다. 있다면 라잉 대신 쓸 근거가 있습니다.</li>
   </ul>
-</section>
+</details>
 
-<section class="sec" id="limits">
-  <h2>근거의 한계</h2>
+<details class="sec" id="limits">
+  <summary><h2>근거의 한계</h2></summary>
   <ul>
     <li><b>초록만 확인했습니다.</b> PubMed에 실린 초록을 읽고 적었습니다. 본문 전체는 읽지 않았습니다. 레터럴 레이즈 연구만 학술지 사이트의 초록으로 확인했습니다.</li>
     <li><b>연구가 작고 짧습니다.</b> 대부분 참가자 10~50명, 기간 8~12주, 젊은 성인입니다.</li>
@@ -389,10 +386,10 @@
     <li><b>대상이 다릅니다.</b> 남성만, 여성만, 보디빌더만 대상인 연구가 섞여 있습니다.</li>
     <li><b>의학적 조언이 아닙니다.</b> 통증이나 관절 문제가 있으면 진료가 먼저입니다.</li>
   </ul>
-</section>
+</details>
 
-<section class="sec" id="refs">
-  <h2>참고문헌</h2>
+<details class="sec" id="refs">
+  <summary><h2>참고문헌</h2></summary>
   <p class="dnote">모두 PubMed(미국 국립의학도서관)에서 검색해 확인한 논문입니다. 제목을 누르면 논문 페이지(DOI)로 갑니다.</p>
   <ol class="refs">
     <h4>공통 원칙</h4>
@@ -430,9 +427,28 @@
     <li>Damas 등 (2017). The development of skeletal muscle hypertrophy through resistance training: the role of muscle damage and muscle protein synthesis. <i>Eur J Appl Physiol.</i> <a href="https://doi.org/10.1007/s00421-017-3792-9">DOI</a></li>
     <li>American College of Sports Medicine (2009). Position stand: Progression models in resistance training for healthy adults. <i>Med Sci Sports Exerc.</i> <a href="https://doi.org/10.1249/MSS.0b013e3181915670">DOI</a></li>
   </ol>
-</section>
+</details>
 
 <div class="foot"><a href="#top">↑ 맨 위로</a></div>
+<script id="docjs">
+/* 목차·문서 안 링크: 접힌 항목을 펼친 뒤 그 자리로 이동. 모두 펼치기/접기. 앱의 근거 탭에서도 이 코드를 다시 실행한다. */
+(function(){
+  var d=document.getElementById("doc");
+  if(!d||d.getAttribute("data-wired"))return;
+  d.setAttribute("data-wired","1");
+  d.addEventListener("click",function(e){
+    var b=e.target.closest("button[data-all]");
+    if(b){var o=b.getAttribute("data-all")==="open";d.querySelectorAll("details").forEach(function(x){x.open=o});return}
+    var a=e.target.closest("a[href^='#']");
+    if(!a)return;
+    var t=document.getElementById(a.getAttribute("href").slice(1));
+    if(!t||!d.contains(t))return;
+    e.preventDefault();
+    for(var p=t;p&&p!==d;p=p.parentElement){if(p.tagName==="DETAILS")p.open=true}
+    t.scrollIntoView(true);
+  });
+})();
+</script>
 </article>
 <script>document.body.className="doc-page";</script>
 </body>
